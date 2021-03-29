@@ -2,6 +2,7 @@ package com.sumygg.anarts.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
@@ -31,9 +32,16 @@ fun DynamicForm(formDefinition: Any) {
                 items
             }
             .flatten()
-            .forEach {
-                ComposeFormItem(it.first, it.second)
+            .apply {
+                if (this.isEmpty()) {
+                    Text("此Art无配置项")
+                } else {
+                    this.forEach {
+                        ComposeFormItem(it.first, it.second)
+                    }
+                }
             }
+
     }
 
 }
