@@ -16,9 +16,9 @@ abstract class BaseArts {
      * Arts更新的时候触发，用于动画更新，引擎会每隔一段时间定时调用函数。
      * 需要在此处重新计算动画属性值。
      *
-     * @param elapsed 距离上次调用经过的事件，单位毫秒ms
+     * @param elapsedNanos 距离上次调用经过的时间，单位纳秒ns
      */
-    abstract fun onUpdate(elapsed: Long)
+    abstract fun onUpdate(elapsedNanos: Long)
 
     /**
      * Arts在界面的绘制函数，Arts被装载后此函数会被传入Canvas进行界面绘制。

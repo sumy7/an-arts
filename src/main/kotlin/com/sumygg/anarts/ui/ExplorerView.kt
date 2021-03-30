@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sumygg.anarts.arts.Arts
 import com.sumygg.anarts.utils.withoutWidthConstraints
-import kotlin.reflect.full.createInstance
+import com.sumygg.anarts.viewmodel.ArtsModel
 
 /**
  * 渲染一个左右分栏的界面，左边展示配置信息，右边展示输出结果
@@ -29,9 +29,7 @@ import kotlin.reflect.full.createInstance
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExplorerView() {
-    val artsState: MutableState<Arts> = remember { mutableStateOf(Arts.sortedValues.first()) }
-    val artConfig = artsState.value.artsConfig.createInstance()
-    val arts = artsState.value.arts.createInstance()
+    val artsModel by remember { mutableStateOf(ArtsModel(Arts.sortedValues.first())) }
 
     val isArtsListOpenState: MutableState<Boolean> = remember { mutableStateOf(false) }
 
@@ -39,7 +37,7 @@ fun ExplorerView() {
         Box(modifier = Modifier.width(300.dp)) {
             Column {
                 TopAppBar(
-                    title = { Text(text = artsState.value.artsName) },
+                    title = { Text(text = artsModel.artsType.artsName) },
                     elevation = 8.dp,
                     navigationIcon = {
                         IconButton(onClick = {
@@ -50,35 +48,15 @@ fun ExplorerView() {
                     }
                 )
                 if (isArtsListOpenState.value) {
-                    ArtsListView(artsState, isArtsListOpenState)
+                    ArtsListView(artsModel, isArtsListOpenState)
                 } else {
-                    ArtsConfigView(artConfig)
+                    ArtsConfigView(artsModel)
                 }
             }
         }
         Box {
             Column {
-                TopAppBar(
-                    title = { Text("") },
-                    elevation = 8.dp,
-                    navigationIcon = {
-//                        IconButton(onClick = {}) {
-//                            Icon(Icons.Default.PlayArrow, contentDescription = "Play")
-//                        }
-//                        IconButton(onClick = {}) {
-//                            Icon(Icons.Default.AccountCircle, contentDescription = "Stop")
-//                        }
-                    },
-                    actions = {
-//                        IconButton(onClick = {}) {
-//                            Icon(Icons.Default.ArrowDropDown, contentDescription = "Save")
-//                        }
-                    }
-                )
-                Canvas(
-                    modifier = Modifier.fillMaxSize(),
-                    onDraw = arts.onDraw(artConfig)
-                )
+                ArtsView(artsModel)
             }
         }
     }
@@ -86,13 +64,11 @@ fun ExplorerView() {
 
 /**
  * 渲染配置信息
- *
- * @param artConfig 配置信息表单项数据
  */
 @Composable
-private fun ArtsConfigView(artConfig: Any) {
+private fun ArtsConfigView(artsModel: ArtsModel) {
     Column(modifier = Modifier.verticalScroll(state = rememberScrollState())) {
-        DynamicForm(artConfig)
+        DynamicForm(artsModel.artsConfig)
     }
 }
 
@@ -102,7 +78,7 @@ private fun ArtsConfigView(artConfig: Any) {
 @ExperimentalFoundationApi
 @Composable
 private fun ArtsListView(
-    artsState: MutableState<Arts>,
+    artsModel: ArtsModel,
     isArtsListOpenState: MutableState<Boolean>
 ) {
     Box {
@@ -118,7 +94,7 @@ private fun ArtsListView(
                 state = scrollState
             ) {
                 items(sortedItems) {
-                    ArtsListItemViewImpl(it, artsState, fontSize, lineHeight) {
+                    ArtsListItemViewImpl(it, artsModel, fontSize, lineHeight) {
                         isArtsListOpenState.value = false
                     }
                 }
@@ -139,18 +115,18 @@ private fun ArtsListView(
 @Composable
 private fun ArtsListItemViewImpl(
     arts: Arts,
-    artsState: MutableState<Arts>,
+    artsModel: ArtsModel,
     fontSize: TextUnit,
     height: Dp,
     artListClickCallback: () -> Unit
 ) {
-    val isCurrent = artsState.value == arts
+    val isCurrent = artsModel.artsType == arts
 
     Row(
         modifier = Modifier
             .wrapContentHeight()
             .clickable {
-                artsState.value = arts
+                artsModel.switchTo(arts)
                 artListClickCallback()
             }
             .height(height)

@@ -14,7 +14,7 @@ class Maze : BaseArts() {
         // 无需要初始化
     }
 
-    override fun onUpdate(elapsed: Long) {
+    override fun onUpdate(elapsedNanos: Long) {
         // 无需要更新内部变量
     }
 

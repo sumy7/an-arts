@@ -20,7 +20,7 @@ class CircleLoop : BaseArts() {
         // 无需要初始化内部变量
     }
 
-    override fun onUpdate(elapsed: Long) {
+    override fun onUpdate(elapsedNanos: Long) {
         // 静态Arts不需要更新
     }
 

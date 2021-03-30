@@ -11,11 +11,12 @@ import kotlin.reflect.KClass
  */
 enum class Arts(
     val artsName: String,
+    val animated: Boolean,
     val artsConfig: KClass<out ArtsConfig>,
     val arts: KClass<out BaseArts>
 ) {
-    CIRCLE_LOOP("CircleLoop", CircleLoopConfig::class, CircleLoop::class),
-    MAZE("Maze", MazeConfig::class, Maze::class),
+    CIRCLE_LOOP("CircleLoop", false, CircleLoopConfig::class, CircleLoop::class),
+    MAZE("Maze", false, MazeConfig::class, Maze::class),
     ;
 
     companion object {
