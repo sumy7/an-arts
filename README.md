@@ -9,6 +9,7 @@
 + Maze
 + 💫 RotatingSquares
 + 💫 CircleAndDotGrid
++ 💫 CircleGridScale
 
 ## 特别感谢
 
@@ -21,6 +22,7 @@
 + https://github.com/Akashkamble/CanvasPlayground
     + 💫 RotatingSquares
     + 💫 CircleAndDotGrid
+    + 💫 CircleGridScale
 
 ## 贡献
 
