@@ -16,9 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.sumygg.anarts.arts.ALL_ARTS
 import com.sumygg.anarts.arts.Arts
-import com.sumygg.anarts.arts.ArtsConfig
 import kotlin.reflect.full.createInstance
 
 /**
@@ -26,13 +24,14 @@ import kotlin.reflect.full.createInstance
  */
 @Composable
 fun ExplorerView() {
-    val artDefine: MutableState<Arts> = remember { mutableStateOf(ALL_ARTS[1]) }
-    val artConfig = artDefine.value.config.createInstance() as ArtsConfig
+    val artDefine: MutableState<Arts> = remember { mutableStateOf(Arts.CIRCLE_LOOP) }
+    val artConfig = artDefine.value.artsConfig.createInstance()
+    val arts = artDefine.value.arts.createInstance()
     Row(Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.width(200.dp)) {
+        Box(modifier = Modifier.width(300.dp)) {
             Column {
                 TopAppBar(
-                    title = { Text(text = artDefine.value.name) },
+                    title = { Text(text = artDefine.value.artsName) },
                     elevation = 8.dp,
                     navigationIcon = {
                         IconButton(onClick = {}) {
@@ -64,7 +63,7 @@ fun ExplorerView() {
                 )
                 Canvas(
                     modifier = Modifier.fillMaxSize(),
-                    onDraw = artDefine.value.draw(artConfig)
+                    onDraw = arts.onDraw(artConfig)
                 )
             }
         }

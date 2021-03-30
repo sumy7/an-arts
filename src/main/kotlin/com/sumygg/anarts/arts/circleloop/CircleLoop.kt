@@ -7,45 +7,60 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import com.sumygg.anarts.arts.ArtsConfig
+import com.sumygg.anarts.arts.BaseArts
 import kotlin.math.cos
 import kotlin.math.sin
 
 /**
- * 绘制CircleLoop
- *
- * @param config circleLoop绘制所需要的外部参数
- * @return 绘制函数
+ * CircleLoop Arts
  */
-fun CircleLoop(config: ArtsConfig): DrawScope.() -> Unit {
-    if (config !is CircleLoopConfig) {
-        throw IllegalArgumentException("CircleLoop must use CircleLoopConfig")
+class CircleLoop : BaseArts() {
+
+    override fun onInit() {
+        // 无需要初始化内部变量
     }
 
-    return {
-        var theta = 0.0
-        val radius = config.radius.value
+    override fun onUpdate(elapsed: Long) {
+        // 静态Arts不需要更新
+    }
 
-        drawRect(Color.Black)
+    /**
+     * 绘制CircleLoop
+     *
+     * @param config circleLoop绘制所需要的外部参数
+     * @return 绘制函数
+     */
+    override fun onDraw(config: ArtsConfig): DrawScope.() -> Unit {
+        if (config !is CircleLoopConfig) {
+            throw IllegalArgumentException("CircleLoop must use CircleLoopConfig")
+        }
 
-        var r = config.radius.value.toDouble()
-        for (i in 0..1000) {
-            translate(
-                this.size.width / 2 - r.toFloat() / 2,
-                this.size.height / 2 - r.toFloat() / 2
-            ) {
-                val x = radius * cos(Math.toRadians(theta))
-                val y = radius * sin(Math.toRadians(theta * 2))
+        return {
+            var theta = 0.0
+            val radius = config.radius.value
 
-                drawOval(
-                    Color.Green,
-                    Offset(x.toFloat(), y.toFloat()),
-                    Size(r.toFloat(), r.toFloat()),
-                    0.3f,
-                    Stroke(width = 1.0f)
-                )
+            drawRect(Color.Black)
+
+            var r = config.radius.value.toDouble()
+            for (i in 0..1000) {
+                translate(
+                    this.size.width / 2 - r.toFloat() / 2,
+                    this.size.height / 2 - r.toFloat() / 2
+                ) {
+                    val x = radius * cos(Math.toRadians(theta))
+                    val y = radius * sin(Math.toRadians(theta * 2))
+
+                    drawOval(
+                        Color.Green,
+                        Offset(x.toFloat(), y.toFloat()),
+                        Size(r.toFloat(), r.toFloat()),
+                        0.3f,
+                        Stroke(width = 1.0f)
+                    )
+                }
+                r += cos(theta) * sin(theta / 2) + sin(theta) * cos(theta / 2)
+                theta += Math.PI / 2
             }
-            r += cos(theta) * sin(theta / 2) + sin(theta) * cos(theta / 2)
-            theta += Math.PI / 2
         }
     }
 }
