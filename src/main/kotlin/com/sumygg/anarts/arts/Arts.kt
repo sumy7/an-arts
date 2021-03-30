@@ -1,5 +1,7 @@
 package com.sumygg.anarts.arts
 
+import com.sumygg.anarts.arts.circleanddotgrid.CircleAndDotGrid
+import com.sumygg.anarts.arts.circleanddotgrid.CircleAndDotGridConfig
 import com.sumygg.anarts.arts.circleloop.CircleLoop
 import com.sumygg.anarts.arts.circleloop.CircleLoopConfig
 import com.sumygg.anarts.arts.maze.Maze
@@ -20,6 +22,7 @@ enum class Arts(
     CIRCLE_LOOP("CircleLoop", false, CircleLoopConfig::class, CircleLoop::class),
     MAZE("Maze", false, MazeConfig::class, Maze::class),
     ROTATING_SQUARES("RotatingSquares", true, RotatingSquaresConfig::class, RotatingSquares::class),
+    CIRCLE_AND_DOT_GRID("CircleAndDotGrid", true, CircleAndDotGridConfig::class, CircleAndDotGrid::class),
     ;
 
     companion object {

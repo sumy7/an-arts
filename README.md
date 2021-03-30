@@ -8,6 +8,7 @@
 + CircleLoop
 + Maze
 + 💫 RotatingSquares
++ 💫 CircleAndDotGrid
 
 ## 特别感谢
 
@@ -19,6 +20,7 @@
 
 + https://github.com/Akashkamble/CanvasPlayground
     + 💫 RotatingSquares
+    + 💫 CircleAndDotGrid
 
 ## 贡献
 
