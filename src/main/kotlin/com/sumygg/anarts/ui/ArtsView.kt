@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.unit.dp
 import com.sumygg.anarts.viewmodel.ArtsModel
 
@@ -39,7 +40,7 @@ fun ArtsView(
         }
     )
     Canvas(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().clipToBounds(),
         onDraw = artsModel.arts.onDraw(artsModel.artsConfig)
     )
 
@@ -49,7 +50,7 @@ fun ArtsView(
             withFrameNanos {
                 val elapsedNanos = (it - lastNanos).coerceAtLeast(0L)
                 lastNanos = it
-                if (!isPause) {
+                if (artsModel.artsType.animated && !isPause) {
                     artsModel.arts.onUpdate(elapsedNanos)
                 }
             }

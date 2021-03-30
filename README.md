@@ -7,12 +7,18 @@
 
 + CircleLoop
 + Maze
++ 💫 RotatingSquares
 
 ## 特别感谢
 
 感谢以下网站、仓库或链接提供的灵感。
 
 + https://github.com/jdxyw/generativeart
+    + CircleLoop
+    + Maze
+
++ https://github.com/Akashkamble/CanvasPlayground
+    + 💫 RotatingSquares
 
 ## 贡献
 

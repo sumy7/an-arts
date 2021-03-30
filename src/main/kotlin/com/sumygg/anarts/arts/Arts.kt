@@ -4,6 +4,8 @@ import com.sumygg.anarts.arts.circleloop.CircleLoop
 import com.sumygg.anarts.arts.circleloop.CircleLoopConfig
 import com.sumygg.anarts.arts.maze.Maze
 import com.sumygg.anarts.arts.maze.MazeConfig
+import com.sumygg.anarts.arts.rotatingsquares.RotatingSquares
+import com.sumygg.anarts.arts.rotatingsquares.RotatingSquaresConfig
 import kotlin.reflect.KClass
 
 /**
@@ -17,6 +19,7 @@ enum class Arts(
 ) {
     CIRCLE_LOOP("CircleLoop", false, CircleLoopConfig::class, CircleLoop::class),
     MAZE("Maze", false, MazeConfig::class, Maze::class),
+    ROTATING_SQUARES("RotatingSquares", true, RotatingSquaresConfig::class, RotatingSquares::class),
     ;
 
     companion object {
