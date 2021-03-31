@@ -25,7 +25,7 @@ data class Rect(
 /**
  * 绘制RotatingSquares
  */
-class RotatingSquares : BaseArts() {
+class RotatingSquares : BaseArts("RotatingSquares") {
 
     private val n = 35
     private val rectList = mutableListOf<Rect>()
@@ -52,6 +52,10 @@ class RotatingSquares : BaseArts() {
     }
 
     override fun onDraw(config: ArtsConfig): DrawScope.() -> Unit {
+        if (config !is RotatingSquaresConfig) {
+            throw IllegalArgumentException("${this.name} must use ${RotatingSquaresConfig::class.simpleName}")
+        }
+
         return {
             translate(size.width / 2, size.height / 2) {
                 for (i in n downTo 0) {

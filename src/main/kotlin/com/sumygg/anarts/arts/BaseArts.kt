@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 /**
  * Arts基础类，定义了Arts的生命周期函数。
  */
-abstract class BaseArts {
+abstract class BaseArts(val name: String) {
 
     /**
      * Arts被载入时触发，需要在此处初始化内部变量

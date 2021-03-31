@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -15,7 +14,7 @@ import com.sumygg.anarts.arts.BaseArts
 /**
  * 绘制CircleAndDotGrid
  */
-class CircleAndDotGrid : BaseArts() {
+class CircleAndDotGrid : BaseArts("CircleAndDotGrid") {
 
     private var angle by mutableStateOf(0f)
 
@@ -28,8 +27,13 @@ class CircleAndDotGrid : BaseArts() {
     }
 
     override fun onDraw(config: ArtsConfig): DrawScope.() -> Unit {
+        if (config !is CircleAndDotGridConfig) {
+            throw IllegalArgumentException("${this.name} must use ${CircleAndDotGridConfig::class.simpleName}")
+        }
 
         return {
+            drawRect(config.background.value)
+
             val n = 25
             val circleRadius = (size.width / n + n / 3)
             val spacing = circleRadius + n / 3
@@ -40,7 +44,7 @@ class CircleAndDotGrid : BaseArts() {
             for (row in 0..n) {
                 for (col in 0..n) {
                     drawCircle(
-                        SolidColor(Color.Black),
+                        SolidColor(config.foreground.value),
                         radius = circleRadius,
                         center = Offset(offsetX, offsetY),
                         style = Stroke(width = 3f)
@@ -52,7 +56,7 @@ class CircleAndDotGrid : BaseArts() {
                         )
                     }) {
                         drawCircle(
-                            color = Color.Black,
+                            color = config.foreground.value,
                             radius = dotRadius,
                             center = Offset(offsetX - diff, offsetY - diff)
                         )

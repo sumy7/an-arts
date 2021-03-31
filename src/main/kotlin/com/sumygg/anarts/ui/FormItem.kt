@@ -1,13 +1,18 @@
 package com.sumygg.anarts.ui
 
-import androidx.compose.material.Slider
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.graphics.Color
+import com.sumygg.anarts.ui.formitem.ColorChooseFormItem
 import com.sumygg.anarts.ui.formitem.InputFormItem
 import com.sumygg.anarts.ui.formitem.SliderFormItem
 import com.sumygg.anarts.ui.formitem.TextFormItem
+import com.sumygg.anarts.utils.reverse
+import com.sumygg.anarts.utils.toAndroidxColor
+import com.sumygg.anarts.utils.toHexString
+import com.sumygg.anarts.utils.toSwingColor
+import javax.swing.JColorChooser
 
 /**
  * 判断是否formItemConfig是不是一个能够解析的类型
@@ -24,6 +29,9 @@ fun canResolvedFormItem(formItemConfig: Any): Boolean {
             true
         }
         is SliderFormItem -> {
+            true
+        }
+        is ColorChooseFormItem -> {
             true
         }
         else -> {
@@ -49,6 +57,9 @@ fun <T> ComposeFormItem(formItemConfig: Any, state: MutableState<T>) {
         }
         is SliderFormItem -> {
             getSliderFormItem(formItemConfig, state)
+        }
+        is ColorChooseFormItem -> {
+            getColorChooseFormItem(formItemConfig, state)
         }
         else -> {
             throw IllegalArgumentException("Unknown FromItem config type ${formItemConfig::class}")
@@ -109,4 +120,36 @@ fun getSliderFormItem(formItem: SliderFormItem, state: MutableState<*>) {
     Slider(value = sliderState.value, onValueChange = {
         sliderState.value = it
     }, valueRange = formItem.min..formItem.max)
+}
+
+/**
+ * 渲染一个颜色选择表单项，用于选择单个颜色
+ *
+ * @param formItem 颜色选择表单项定义
+ * @param state 颜色数据
+ */
+@Composable
+fun getColorChooseFormItem(formItem: ColorChooseFormItem, state: MutableState<*>) {
+    if (state.value !is Color) {
+        throw IllegalArgumentException("FormItem type=ColorChoose must provide [Color] type state value")
+    }
+
+    val colorChooseState = state as MutableState<Color>
+
+    Text(text = formItem.title)
+
+    Button(
+        onClick = {
+            val color = JColorChooser.showDialog(null, "请选择颜色", colorChooseState.value.toSwingColor())
+            if (color != null) {
+                colorChooseState.value = color.toAndroidxColor()
+            }
+        },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = colorChooseState.value,
+            contentColor = colorChooseState.value.reverse()
+        )
+    ) {
+        Text(text = colorChooseState.value.toHexString())
+    }
 }

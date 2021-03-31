@@ -1,7 +1,6 @@
 package com.sumygg.anarts.arts.maze
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import com.sumygg.anarts.arts.ArtsConfig
 import com.sumygg.anarts.arts.BaseArts
@@ -9,7 +8,7 @@ import com.sumygg.anarts.arts.BaseArts
 /**
  * Maze Arts
  */
-class Maze : BaseArts() {
+class Maze : BaseArts("Maze") {
     override fun onInit() {
         // 无需要初始化
     }
@@ -25,24 +24,28 @@ class Maze : BaseArts() {
      */
     override fun onDraw(config: ArtsConfig): DrawScope.() -> Unit {
         if (config !is MazeConfig) {
-            throw IllegalArgumentException("Maze must use MazeConfig")
+            throw IllegalArgumentException("${this.name} must use ${MazeConfig::class.simpleName}")
         }
 
         return {
-            val step = 10
+            drawRect(config.background.value)
+
+            val step = config.step.value
             for (x in 0 until this.size.width.toInt() step step) {
                 for (y in 0 until this.size.height.toInt() step step) {
                     if (Math.random() > 0.5) {
                         drawLine(
-                            Color.Green,
+                            config.foreground.value,
                             Offset(x.toFloat(), y.toFloat()),
-                            Offset((x + step).toFloat(), (y + step).toFloat())
+                            Offset((x + step).toFloat(), (y + step).toFloat()),
+                            config.lineWidth.value
                         )
                     } else {
                         drawLine(
-                            Color.Green,
+                            config.foreground.value,
                             Offset((x + step).toFloat(), y.toFloat()),
-                            Offset(x.toFloat(), (y + step).toFloat())
+                            Offset(x.toFloat(), (y + step).toFloat()),
+                            config.lineWidth.value
                         )
                     }
                 }

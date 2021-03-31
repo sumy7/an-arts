@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
@@ -16,7 +15,7 @@ import com.sumygg.anarts.arts.BaseArts
 /**
  * 绘制 CircleGridScale
  */
-class CircleGridScale : BaseArts() {
+class CircleGridScale : BaseArts("CircleGridScale") {
 
     private var scale by mutableStateOf(0f)
     private var timeElapsed = 0L
@@ -39,7 +38,13 @@ class CircleGridScale : BaseArts() {
     }
 
     override fun onDraw(config: ArtsConfig): DrawScope.() -> Unit {
+        if (config !is CircleGridScaleConfig) {
+            throw IllegalArgumentException("${this.name} must use ${CircleGridScaleConfig::class.simpleName}")
+        }
+
         return {
+            drawRect(config.background.value)
+
             val radius = 50f
             val n = 25
             var colOffset: Float
@@ -52,7 +57,7 @@ class CircleGridScale : BaseArts() {
                 }
                 for (col in 1..n) {
                     drawCircle(
-                        SolidColor(Color.Black),
+                        SolidColor(config.foreground.value),
                         radius = radius * scale,
                         center = Offset(
                             colOffset,
