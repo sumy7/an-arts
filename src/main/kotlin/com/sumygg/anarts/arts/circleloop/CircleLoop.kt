@@ -50,11 +50,10 @@ class CircleLoop : BaseArts("CircleLoop") {
                     val y = radius * sin(Math.toRadians(theta * 2))
 
                     drawOval(
-                        config.foreground.value,
-                        Offset(x.toFloat(), y.toFloat()),
-                        Size(r.toFloat(), r.toFloat()),
-                        config.alpha.value,
-                        Stroke(width = config.lineWidth.value)
+                        color = config.foreground.value,
+                        topLeft = Offset(x.toFloat(), y.toFloat()),
+                        size = Size(r.toFloat(), r.toFloat()),
+                        style = Stroke(width = config.lineWidth.value)
                     )
                 }
                 r += cos(theta) * sin(theta / 2) + sin(theta) * cos(theta / 2)

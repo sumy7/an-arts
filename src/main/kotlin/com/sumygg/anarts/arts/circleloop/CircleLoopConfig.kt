@@ -21,7 +21,7 @@ class CircleLoopConfig : ArtsConfig() {
      * 前景色
      */
     @get:ColorChooseFormItem(title = "foreground")
-    val foreground = mutableStateOf(Color(0xFFFFA500))
+    val foreground = mutableStateOf(Color(0x1EFFA500))
 
     /**
      * 半径
@@ -33,11 +33,6 @@ class CircleLoopConfig : ArtsConfig() {
      * 线宽
      */
     val lineWidth = mutableStateOf(1.0f)
-
-    /**
-     * 透明度
-     */
-    val alpha = mutableStateOf(0.3f)
 
     /**
      * 迭代次数

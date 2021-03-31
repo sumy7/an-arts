@@ -10,6 +10,7 @@
 + 💫 RotatingSquares
 + 💫 CircleAndDotGrid
 + 💫 CircleGridScale
++ Yarn
 
 ## 特别感谢
 
@@ -18,6 +19,7 @@
 + https://github.com/jdxyw/generativeart
     + CircleLoop
     + Maze
+    + Yarn
 
 + https://github.com/Akashkamble/CanvasPlayground
     + 💫 RotatingSquares

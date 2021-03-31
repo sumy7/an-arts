@@ -10,6 +10,8 @@ import com.sumygg.anarts.arts.maze.Maze
 import com.sumygg.anarts.arts.maze.MazeConfig
 import com.sumygg.anarts.arts.rotatingsquares.RotatingSquares
 import com.sumygg.anarts.arts.rotatingsquares.RotatingSquaresConfig
+import com.sumygg.anarts.arts.yarn.Yarn
+import com.sumygg.anarts.arts.yarn.YarnConfig
 import kotlin.reflect.KClass
 
 /**
@@ -26,6 +28,7 @@ enum class Arts(
     ROTATING_SQUARES("RotatingSquares", true, RotatingSquaresConfig::class, RotatingSquares::class),
     CIRCLE_AND_DOT_GRID("CircleAndDotGrid", true, CircleAndDotGridConfig::class, CircleAndDotGrid::class),
     CIRCLE_GRID_SCALE("CircleGridScale", true, CircleGridScaleConfig::class, CircleGridScale::class),
+    YARN("Yarn", false, YarnConfig::class, Yarn::class),
     ;
 
     companion object {
