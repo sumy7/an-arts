@@ -6,6 +6,8 @@ import com.sumygg.anarts.arts.circlegridscale.CircleGridScale
 import com.sumygg.anarts.arts.circlegridscale.CircleGridScaleConfig
 import com.sumygg.anarts.arts.circleloop.CircleLoop
 import com.sumygg.anarts.arts.circleloop.CircleLoopConfig
+import com.sumygg.anarts.arts.hearts.Hearts
+import com.sumygg.anarts.arts.hearts.HeartsConfig
 import com.sumygg.anarts.arts.maze.Maze
 import com.sumygg.anarts.arts.maze.MazeConfig
 import com.sumygg.anarts.arts.rotatingsquares.RotatingSquares
@@ -29,6 +31,7 @@ enum class Arts(
     CIRCLE_AND_DOT_GRID("CircleAndDotGrid", true, CircleAndDotGridConfig::class, CircleAndDotGrid::class),
     CIRCLE_GRID_SCALE("CircleGridScale", true, CircleGridScaleConfig::class, CircleGridScale::class),
     YARN("Yarn", false, YarnConfig::class, Yarn::class),
+    HEARTS("Hearts", true, HeartsConfig::class, Hearts::class),
     ;
 
     companion object {
