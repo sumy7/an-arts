@@ -1,13 +1,11 @@
 package com.sumygg.anarts.ui
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
-import com.sumygg.anarts.ui.formitem.ColorChooseFormItem
-import com.sumygg.anarts.ui.formitem.InputFormItem
-import com.sumygg.anarts.ui.formitem.SliderFormItem
-import com.sumygg.anarts.ui.formitem.TextFormItem
+import com.sumygg.anarts.ui.formitem.*
 import com.sumygg.anarts.utils.reverse
 import com.sumygg.anarts.utils.toAndroidxColor
 import com.sumygg.anarts.utils.toHexString
@@ -32,6 +30,9 @@ fun canResolvedFormItem(formItemConfig: Any): Boolean {
             true
         }
         is ColorChooseFormItem -> {
+            true
+        }
+        is RadioFormItem -> {
             true
         }
         else -> {
@@ -60,6 +61,9 @@ fun <T> ComposeFormItem(formItemConfig: Any, state: MutableState<T>) {
         }
         is ColorChooseFormItem -> {
             getColorChooseFormItem(formItemConfig, state)
+        }
+        is RadioFormItem -> {
+            getRadioFormItem(formItemConfig, state)
         }
         else -> {
             throw IllegalArgumentException("Unknown FromItem config type ${formItemConfig::class}")
@@ -151,5 +155,27 @@ fun getColorChooseFormItem(formItem: ColorChooseFormItem, state: MutableState<*>
         )
     ) {
         Text(text = colorChooseState.value.toHexString())
+    }
+}
+
+/**
+ * 渲染一个单项选择列表
+ */
+@Composable
+fun getRadioFormItem(formItem: RadioFormItem, state: MutableState<*>) {
+    if (state.value !is String) {
+        throw IllegalArgumentException("FormItem type=Radio must provide [String] type state value")
+    }
+
+    Text(text = formItem.title)
+
+    val radioChooseState = state as MutableState<String>
+
+    for (item in formItem.values) {
+        Row {
+            RadioButton(selected = radioChooseState.value == item,
+                onClick = { radioChooseState.value = item })
+            Text(text = item)
+        }
     }
 }
