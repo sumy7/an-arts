@@ -12,6 +12,7 @@
 + 💫 CircleGridScale
 + Yarn
 + 💫 Hearts
++ Identicon
 
 ## 特别感谢
 
@@ -29,6 +30,9 @@
 
 + https://codepen.io/giaco/pen/BbpKZy
     + 💫 Hearts
+
++ https://github.com/stewartlord/identicon.js
+    + Identicon
 
 ## 贡献
 
