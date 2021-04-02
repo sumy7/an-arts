@@ -1,42 +1,59 @@
 package com.sumygg.anarts.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.sumygg.anarts.ui.formitem.*
 import com.sumygg.anarts.utils.reverse
 import com.sumygg.anarts.utils.toAndroidxColor
 import com.sumygg.anarts.utils.toHexString
 import com.sumygg.anarts.utils.toSwingColor
 import javax.swing.JColorChooser
+import kotlin.reflect.KClass
 
 /**
- * 判断是否formItemConfig是不是一个能够解析的类型
- *
- * @param formItemConfig 期待的表单注解类型
- * @return 是否能够解析
+ * 表单类型和响应值对照表
  */
-fun canResolvedFormItem(formItemConfig: Any): Boolean {
-    return when (formItemConfig) {
-        is InputFormItem -> {
-            true
-        }
-        is TextFormItem -> {
-            true
-        }
-        is SliderFormItem -> {
-            true
-        }
-        is ColorChooseFormItem -> {
-            true
-        }
-        is RadioFormItem -> {
-            true
-        }
-        else -> {
-            false
+enum class FormItemResolveType(
+    val itemConfigType: KClass<*>,
+    val mutableType: KClass<*>
+) {
+    INPUT(InputFormItem::class, MutableState::class),
+    TEXT(TextFormItem::class, MutableState::class),
+    SLIDER(SliderFormItem::class, MutableState::class),
+    COLOR_CHOOSE(ColorChooseFormItem::class, MutableState::class),
+    RADIO(RadioFormItem::class, MutableState::class),
+    COLOR_LIST(ColorListFormItem::class, MutableList::class),
+    UNRESOLVED(Any::class, Any::class),
+    ;
+
+    companion object {
+        /**
+         * 判断是否formItemConfig是不是一个能够解析的类型
+         *
+         * @param formItemConfig 期待的表单注解类型
+         * @param state 期待解析的响应值
+         * @return 能够解析的类型
+         */
+        fun resolveType(formItemConfig: Any, state: Any): FormItemResolveType {
+            for (item in values()) {
+                if (item.itemConfigType.isInstance(formItemConfig) &&
+                    item.mutableType.isInstance(state)
+                ) {
+                    return item
+                }
+            }
+            return UNRESOLVED
         }
     }
 }
@@ -48,22 +65,25 @@ fun canResolvedFormItem(formItemConfig: Any): Boolean {
  * @param state 表单项数据
  */
 @Composable
-fun <T> ComposeFormItem(formItemConfig: Any, state: MutableState<T>) {
-    when (formItemConfig) {
-        is InputFormItem -> {
-            getInputFormItem(formItemConfig, state)
+fun ComposeFormItem(resolveType: FormItemResolveType, formItemConfig: Any, state: Any) {
+    when (resolveType) {
+        FormItemResolveType.INPUT -> {
+            getInputFormItem(formItemConfig as InputFormItem, state as MutableState<*>)
         }
-        is TextFormItem -> {
-            getTextFormItem(formItemConfig, state)
+        FormItemResolveType.TEXT -> {
+            getTextFormItem(formItemConfig as TextFormItem, state as MutableState<*>)
         }
-        is SliderFormItem -> {
-            getSliderFormItem(formItemConfig, state)
+        FormItemResolveType.SLIDER -> {
+            getSliderFormItem(formItemConfig as SliderFormItem, state as MutableState<*>)
         }
-        is ColorChooseFormItem -> {
-            getColorChooseFormItem(formItemConfig, state)
+        FormItemResolveType.COLOR_CHOOSE -> {
+            getColorChooseFormItem(formItemConfig as ColorChooseFormItem, state as MutableState<*>)
         }
-        is RadioFormItem -> {
-            getRadioFormItem(formItemConfig, state)
+        FormItemResolveType.RADIO -> {
+            getRadioFormItem(formItemConfig as RadioFormItem, state as MutableState<*>)
+        }
+        FormItemResolveType.COLOR_LIST -> {
+            getColorListFormItem(formItemConfig as ColorListFormItem, state as MutableList<*>)
         }
         else -> {
             throw IllegalArgumentException("Unknown FromItem config type ${formItemConfig::class}")
@@ -176,6 +196,62 @@ fun getRadioFormItem(formItem: RadioFormItem, state: MutableState<*>) {
             RadioButton(selected = radioChooseState.value == item,
                 onClick = { radioChooseState.value = item })
             Text(text = item)
+        }
+    }
+}
+
+/**
+ * 渲染一个颜色选择列表
+ */
+@Composable
+fun getColorListFormItem(formItem: ColorListFormItem, state: MutableList<*>) {
+
+    val colorListState = state as MutableList<Color>
+
+    Row {
+        Text(text = formItem.title)
+        IconButton(onClick = {
+            colorListState.add(Color.Black)
+        }) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = null
+            )
+        }
+    }
+
+    Column {
+        colorListState.forEachIndexed { i, _ ->
+            Row {
+                Button(
+                    onClick = {
+                        val color = JColorChooser.showDialog(null, "请选择颜色", colorListState[i].toSwingColor())
+                        if (color != null) {
+                            colorListState[i] = color.toAndroidxColor()
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = colorListState[i],
+                        contentColor = colorListState[i].reverse()
+                    )
+                ) {
+                    Text(text = colorListState[i].toHexString())
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                if (formItem.canEmpty || (!formItem.canEmpty && state.size > 1)) {
+                    IconButton(onClick = {
+                        colorListState.removeAt(i)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = null
+                        )
+                    }
+                }
+            }
+            Divider()
         }
     }
 }
