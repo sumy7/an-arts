@@ -13,6 +13,7 @@
 + Yarn
 + 💫 Hearts
 + Identicon
++ DotsWave
 
 ## 特别感谢
 
@@ -22,6 +23,7 @@
     + CircleLoop
     + Maze
     + Yarn
+    + DotsWave
 
 + https://github.com/Akashkamble/CanvasPlayground
     + 💫 RotatingSquares

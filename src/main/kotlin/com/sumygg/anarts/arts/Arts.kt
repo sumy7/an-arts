@@ -6,6 +6,8 @@ import com.sumygg.anarts.arts.circlegridscale.CircleGridScale
 import com.sumygg.anarts.arts.circlegridscale.CircleGridScaleConfig
 import com.sumygg.anarts.arts.circleloop.CircleLoop
 import com.sumygg.anarts.arts.circleloop.CircleLoopConfig
+import com.sumygg.anarts.arts.dotswave.DotsWave
+import com.sumygg.anarts.arts.dotswave.DotsWaveConfig
 import com.sumygg.anarts.arts.hearts.Hearts
 import com.sumygg.anarts.arts.hearts.HeartsConfig
 import com.sumygg.anarts.arts.identicon.Identicon
@@ -35,6 +37,7 @@ enum class Arts(
     YARN("Yarn", false, YarnConfig::class, Yarn::class),
     HEARTS("Hearts", true, HeartsConfig::class, Hearts::class),
     IDENTICON("Identicon", false, IdenticonConfig::class, Identicon::class),
+    DOTSWAVE("DotsWave", false, DotsWaveConfig::class, DotsWave::class),
     ;
 
     companion object {
