@@ -6,6 +6,10 @@ import com.sumygg.anarts.arts.circlegridscale.CircleGridScale
 import com.sumygg.anarts.arts.circlegridscale.CircleGridScaleConfig
 import com.sumygg.anarts.arts.circleloop.CircleLoop
 import com.sumygg.anarts.arts.circleloop.CircleLoopConfig
+import com.sumygg.anarts.arts.cistercianclock.CistercianClock
+import com.sumygg.anarts.arts.cistercianclock.CistercianClockConfig
+import com.sumygg.anarts.arts.cisterciannumerals.CistercianNumerals
+import com.sumygg.anarts.arts.cisterciannumerals.CistercianNumeralsConfig
 import com.sumygg.anarts.arts.dotswave.DotsWave
 import com.sumygg.anarts.arts.dotswave.DotsWaveConfig
 import com.sumygg.anarts.arts.hearts.Hearts
@@ -38,6 +42,8 @@ enum class Arts(
     HEARTS("Hearts", true, HeartsConfig::class, Hearts::class),
     IDENTICON("Identicon", false, IdenticonConfig::class, Identicon::class),
     DOTSWAVE("DotsWave", false, DotsWaveConfig::class, DotsWave::class),
+    CISTERCIAN_NUMERALS("CistercianNumerals", false, CistercianNumeralsConfig::class, CistercianNumerals::class),
+    CISTERCIAN_CLOCK("CistercianClock", true, CistercianClockConfig::class, CistercianClock::class),
     ;
 
     companion object {

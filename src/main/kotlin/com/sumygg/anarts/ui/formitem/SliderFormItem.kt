@@ -8,5 +8,7 @@ package com.sumygg.anarts.ui.formitem
 annotation class SliderFormItem(
     val title: String,
     val min: Float,
-    val max: Float
+    val max: Float,
+    val steps: Int = 0,
+    val fixToInt: Boolean = false,
 )

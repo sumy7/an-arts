@@ -135,15 +135,24 @@ fun getInputFormItem(formItem: InputFormItem, state: MutableState<*>) {
  */
 @Composable
 fun getSliderFormItem(formItem: SliderFormItem, state: MutableState<*>) {
-    if (state.value !is Float) {
-        throw IllegalArgumentException("FormItem type=Slide must provide [Float] type state value")
+    if (state.value !is Number) {
+        throw IllegalArgumentException("FormItem type=Slide must provide [Number] type state value")
     }
     Text(text = "${formItem.title} = ${state.value}")
 
-    val sliderState = state as MutableState<Float>
-    Slider(value = sliderState.value, onValueChange = {
-        sliderState.value = it
-    }, valueRange = formItem.min..formItem.max)
+    val sliderState = state as MutableState<Number>
+    Slider(
+        value = sliderState.value.toFloat(),
+        onValueChange = {
+            if (formItem.fixToInt) {
+                sliderState.value = it.toInt()
+            } else {
+                sliderState.value = it
+            }
+        },
+        valueRange = formItem.min..formItem.max,
+        steps = formItem.steps,
+    )
 }
 
 /**

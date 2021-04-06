@@ -24,6 +24,8 @@
 + 💫 Hearts
 + Identicon
 + DotsWave
++ CistercianNumerals
++ 💫 CistercianClock
 
 ## 特别感谢
 
@@ -45,6 +47,10 @@
 
 + https://github.com/stewartlord/identicon.js
     + Identicon
+
++ https://github.com/ednl/cistercian-clock/blob/main/sketch.js
+    + CistercianNumerals
+    + 💫 CistercianClock
 
 ## 贡献
 
