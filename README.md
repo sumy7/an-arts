@@ -33,6 +33,10 @@
   ![Identicon](screenshots/Identicon.png)
 + DotsWave
   ![DotsWave](screenshots/DotsWave.png)
++ CistercianNumerals
+  ![DotsWave](screenshots/CistercianNumerals.png)
++ 💫 CistercianClock
+  ![DotsWave](screenshots/CistercianClock.png)
 
 ## 特别感谢
 
@@ -54,6 +58,10 @@
 
 + https://github.com/stewartlord/identicon.js
     + Identicon
+
++ https://github.com/ednl/cistercian-clock/blob/main/sketch.js
+    + CistercianNumerals
+    + 💫 CistercianClock
 
 ## 贡献
 
