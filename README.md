@@ -34,9 +34,11 @@
 + DotsWave
   ![DotsWave](screenshots/DotsWave.png)
 + CistercianNumerals
-  ![DotsWave](screenshots/CistercianNumerals.png)
+  ![CistercianNumerals](screenshots/CistercianNumerals.png)
 + 💫 CistercianClock
-  ![DotsWave](screenshots/CistercianClock.png)
+  ![CistercianClock](screenshots/CistercianClock.png)
++ 💫 VoidSetup
+  ![VoidSetup](screenshots/VoidSetup.png)
 
 ## 特别感谢
 
@@ -62,6 +64,9 @@
 + https://github.com/ednl/cistercian-clock/blob/main/sketch.js
     + CistercianNumerals
     + 💫 CistercianClock
+
++ https://sumygg.com/2018/07/31/p5js-version-for-taiko-drum-master-song-void-setup/
+    + 💫 VoidSetup
 
 ## 贡献
 
