@@ -26,6 +26,7 @@
 + DotsWave
 + CistercianNumerals
 + 💫 CistercianClock
++ 💫 VoidSetup
 
 ## 特别感谢
 
@@ -51,6 +52,9 @@
 + https://github.com/ednl/cistercian-clock/blob/main/sketch.js
     + CistercianNumerals
     + 💫 CistercianClock
+
++ https://sumygg.com/2018/07/31/p5js-version-for-taiko-drum-master-song-void-setup/
+    + 💫 VoidSetup
 
 ## 贡献
 

@@ -20,6 +20,8 @@ import com.sumygg.anarts.arts.maze.Maze
 import com.sumygg.anarts.arts.maze.MazeConfig
 import com.sumygg.anarts.arts.rotatingsquares.RotatingSquares
 import com.sumygg.anarts.arts.rotatingsquares.RotatingSquaresConfig
+import com.sumygg.anarts.arts.voidsetup.VoidSetup
+import com.sumygg.anarts.arts.voidsetup.VoidSetupConfig
 import com.sumygg.anarts.arts.yarn.Yarn
 import com.sumygg.anarts.arts.yarn.YarnConfig
 import kotlin.reflect.KClass
@@ -44,6 +46,7 @@ enum class Arts(
     DOTSWAVE("DotsWave", false, DotsWaveConfig::class, DotsWave::class),
     CISTERCIAN_NUMERALS("CistercianNumerals", false, CistercianNumeralsConfig::class, CistercianNumerals::class),
     CISTERCIAN_CLOCK("CistercianClock", true, CistercianClockConfig::class, CistercianClock::class),
+    VOID_SETUP("VoidSetup", true, VoidSetupConfig::class, VoidSetup::class),
     ;
 
     companion object {
