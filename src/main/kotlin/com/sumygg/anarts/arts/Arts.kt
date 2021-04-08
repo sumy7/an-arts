@@ -18,6 +18,8 @@ import com.sumygg.anarts.arts.identicon.Identicon
 import com.sumygg.anarts.arts.identicon.IdenticonConfig
 import com.sumygg.anarts.arts.maze.Maze
 import com.sumygg.anarts.arts.maze.MazeConfig
+import com.sumygg.anarts.arts.recursivetree.RecursiveTree
+import com.sumygg.anarts.arts.recursivetree.RecursiveTreeConfig
 import com.sumygg.anarts.arts.rotatingsquares.RotatingSquares
 import com.sumygg.anarts.arts.rotatingsquares.RotatingSquaresConfig
 import com.sumygg.anarts.arts.voidsetup.VoidSetup
@@ -47,6 +49,7 @@ enum class Arts(
     CISTERCIAN_NUMERALS("CistercianNumerals", false, CistercianNumeralsConfig::class, CistercianNumerals::class),
     CISTERCIAN_CLOCK("CistercianClock", true, CistercianClockConfig::class, CistercianClock::class),
     VOID_SETUP("VoidSetup", true, VoidSetupConfig::class, VoidSetup::class),
+    RECURSIVE_TREE("RecursiveTree", false, RecursiveTreeConfig::class, RecursiveTree::class),
     ;
 
     companion object {
