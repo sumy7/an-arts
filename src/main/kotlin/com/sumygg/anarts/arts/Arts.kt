@@ -10,6 +10,8 @@ import com.sumygg.anarts.arts.cistercianclock.CistercianClock
 import com.sumygg.anarts.arts.cistercianclock.CistercianClockConfig
 import com.sumygg.anarts.arts.cisterciannumerals.CistercianNumerals
 import com.sumygg.anarts.arts.cisterciannumerals.CistercianNumeralsConfig
+import com.sumygg.anarts.arts.contourline.ContourLine
+import com.sumygg.anarts.arts.contourline.ContourLineConfig
 import com.sumygg.anarts.arts.dotswave.DotsWave
 import com.sumygg.anarts.arts.dotswave.DotsWaveConfig
 import com.sumygg.anarts.arts.hearts.Hearts
@@ -50,6 +52,7 @@ enum class Arts(
     CISTERCIAN_CLOCK("CistercianClock", true, CistercianClockConfig::class, CistercianClock::class),
     VOID_SETUP("VoidSetup", true, VoidSetupConfig::class, VoidSetup::class),
     RECURSIVE_TREE("RecursiveTree", false, RecursiveTreeConfig::class, RecursiveTree::class),
+//    CONTOUR_LINE("ContourLine", false, ContourLineConfig::class, ContourLine::class),
     ;
 
     companion object {
