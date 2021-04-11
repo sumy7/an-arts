@@ -16,31 +16,31 @@
 > [ 💫 ] 为动画类型Arts
 
 + CircleLoop
-  ![CircleLoop](screenshots/CircleLoop.png)
+  ![CircleLoop](screenshots/CircleLoop.jpg)
 + Maze
-  ![Maze](screenshots/Maze.png)
+  ![Maze](screenshots/Maze.jpg)
 + 💫 RotatingSquares
-  ![RotatingSquares](screenshots/RotatingSquares.png)
+  ![RotatingSquares](screenshots/RotatingSquares.jpg)
 + 💫 CircleAndDotGrid
-  ![CircleAndDotGrid](screenshots/CircleAndDotGrid.png)
+  ![CircleAndDotGrid](screenshots/CircleAndDotGrid.jpg)
 + 💫 CircleGridScale
-  ![CircleGridScale](screenshots/CircleGridScale.png)
+  ![CircleGridScale](screenshots/CircleGridScale.jpg)
 + Yarn
-  ![Yarn](screenshots/Yarn.png)
+  ![Yarn](screenshots/Yarn.jpg)
 + 💫 Hearts
-  ![Hearts](screenshots/Hearts.png)
+  ![Hearts](screenshots/Hearts.jpg)
 + Identicon
-  ![Identicon](screenshots/Identicon.png)
+  ![Identicon](screenshots/Identicon.jpg)
 + DotsWave
-  ![DotsWave](screenshots/DotsWave.png)
+  ![DotsWave](screenshots/DotsWave.jpg)
 + CistercianNumerals
-  ![CistercianNumerals](screenshots/CistercianNumerals.png)
+  ![CistercianNumerals](screenshots/CistercianNumerals.jpg)
 + 💫 CistercianClock
-  ![CistercianClock](screenshots/CistercianClock.png)
+  ![CistercianClock](screenshots/CistercianClock.jpg)
 + 💫 VoidSetup
-  ![VoidSetup](screenshots/VoidSetup.png)
+  ![VoidSetup](screenshots/VoidSetup.jpg)
 + RecursiveTree
-  ![RecursiveTree](screenshots/RecursiveTree.png)
+  ![RecursiveTree](screenshots/RecursiveTree.jpg)
 
 ## 特别感谢
 
