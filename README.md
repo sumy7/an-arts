@@ -41,6 +41,8 @@
   ![VoidSetup](screenshots/VoidSetup.jpg)
 + RecursiveTree
   ![RecursiveTree](screenshots/RecursiveTree.jpg)
++ SilkSky
+  ![SilkSky](screenshots/SilkSky.jpg)
 
 ## 特别感谢
 
@@ -51,6 +53,7 @@
     + Maze
     + Yarn
     + DotsWave
+    + SilkSky
 
 + https://github.com/Akashkamble/CanvasPlayground
     + 💫 RotatingSquares
