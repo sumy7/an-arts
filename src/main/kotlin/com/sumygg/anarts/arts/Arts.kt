@@ -24,6 +24,8 @@ import com.sumygg.anarts.arts.recursivetree.RecursiveTree
 import com.sumygg.anarts.arts.recursivetree.RecursiveTreeConfig
 import com.sumygg.anarts.arts.rotatingsquares.RotatingSquares
 import com.sumygg.anarts.arts.rotatingsquares.RotatingSquaresConfig
+import com.sumygg.anarts.arts.silksky.SilkSky
+import com.sumygg.anarts.arts.silksky.SilkSkyConfig
 import com.sumygg.anarts.arts.voidsetup.VoidSetup
 import com.sumygg.anarts.arts.voidsetup.VoidSetupConfig
 import com.sumygg.anarts.arts.yarn.Yarn
@@ -53,6 +55,7 @@ enum class Arts(
     VOID_SETUP("VoidSetup", true, VoidSetupConfig::class, VoidSetup::class),
     RECURSIVE_TREE("RecursiveTree", false, RecursiveTreeConfig::class, RecursiveTree::class),
 //    CONTOUR_LINE("ContourLine", false, ContourLineConfig::class, ContourLine::class),
+    SILKSKY("SilkSky", false, SilkSkyConfig::class, SilkSky::class),
     ;
 
     companion object {

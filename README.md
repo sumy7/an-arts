@@ -28,6 +28,7 @@
 + 💫 CistercianClock
 + 💫 VoidSetup
 + RecursiveTree
++ SilkSky
 
 ## 特别感谢
 
@@ -38,6 +39,7 @@
     + Maze
     + Yarn
     + DotsWave
+    + SilkSky
 
 + https://github.com/Akashkamble/CanvasPlayground
     + 💫 RotatingSquares
