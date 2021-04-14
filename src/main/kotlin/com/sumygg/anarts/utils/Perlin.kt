@@ -1,5 +1,7 @@
 package com.sumygg.anarts.utils
 
+import kotlin.math.absoluteValue
+
 // version 1.1.3
 // from: https://rosettacode.org/wiki/Perlin_noise#Kotlin
 object Perlin {
@@ -27,15 +29,15 @@ object Perlin {
     }
 
     fun noise1D(x: Double): Double {
-        return noise(x, 0.0, 0.0)
+        return noise(x, 0.0, 0.0).absoluteValue
     }
 
     fun noise2D(x: Double, y: Double): Double {
-        return noise(x, y, 0.0)
+        return noise(x, y, 0.0).absoluteValue
     }
 
     fun noise3D(x: Double, y: Double, z: Double): Double {
-        return noise(x, y, z)
+        return noise(x, y, z).absoluteValue
     }
 
     fun noise(x: Double, y: Double, z: Double): Double {

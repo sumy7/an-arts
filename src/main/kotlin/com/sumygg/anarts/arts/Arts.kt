@@ -1,5 +1,7 @@
 package com.sumygg.anarts.arts
 
+import com.sumygg.anarts.arts.blackhole.BlackHole
+import com.sumygg.anarts.arts.blackhole.BlackHoleConfig
 import com.sumygg.anarts.arts.circleanddotgrid.CircleAndDotGrid
 import com.sumygg.anarts.arts.circleanddotgrid.CircleAndDotGridConfig
 import com.sumygg.anarts.arts.circlegridscale.CircleGridScale
@@ -56,6 +58,7 @@ enum class Arts(
     RECURSIVE_TREE("RecursiveTree", false, RecursiveTreeConfig::class, RecursiveTree::class),
 //    CONTOUR_LINE("ContourLine", false, ContourLineConfig::class, ContourLine::class),
     SILKSKY("SilkSky", false, SilkSkyConfig::class, SilkSky::class),
+    BLACKHOLE("BlackHole", false, BlackHoleConfig::class, BlackHole::class),
     ;
 
     companion object {
