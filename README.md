@@ -30,6 +30,7 @@
 + RecursiveTree
 + SilkSky
 + BlackHole
++ 💫 SnowFlakes
 
 ## 特别感谢
 
@@ -63,6 +64,9 @@
 
 + https://p5js.org/examples/simulate-recursive-tree.html
     + RecursiveTree
+
++ https://p5js.org/examples/simulate-snowflakes.html
+    + 💫 SnowFlakes
 
 ## 贡献
 

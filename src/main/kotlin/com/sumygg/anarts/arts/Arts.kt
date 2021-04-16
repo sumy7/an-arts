@@ -28,6 +28,8 @@ import com.sumygg.anarts.arts.rotatingsquares.RotatingSquares
 import com.sumygg.anarts.arts.rotatingsquares.RotatingSquaresConfig
 import com.sumygg.anarts.arts.silksky.SilkSky
 import com.sumygg.anarts.arts.silksky.SilkSkyConfig
+import com.sumygg.anarts.arts.snowflakes.SnowFlakes
+import com.sumygg.anarts.arts.snowflakes.SnowFlakesConfig
 import com.sumygg.anarts.arts.voidsetup.VoidSetup
 import com.sumygg.anarts.arts.voidsetup.VoidSetupConfig
 import com.sumygg.anarts.arts.yarn.Yarn
@@ -59,6 +61,7 @@ enum class Arts(
 //    CONTOUR_LINE("ContourLine", false, ContourLineConfig::class, ContourLine::class),
     SILKSKY("SilkSky", false, SilkSkyConfig::class, SilkSky::class),
     BLACKHOLE("BlackHole", false, BlackHoleConfig::class, BlackHole::class),
+    SNOWFLAKES("SnowFlakes", true, SnowFlakesConfig::class, SnowFlakes::class),
     ;
 
     companion object {
