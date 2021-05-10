@@ -47,6 +47,8 @@
   ![BlackHole](screenshots/BlackHole.jpg)
 + 💫 SnowFlakes
   ![SnowFlakes](screenshots/SnowFlakes.jpg)
++ PointRibbon
+  ![PointRibbon](screenshots/PointRibbon.jpg)
 
 ## 特别感谢
 
@@ -59,6 +61,7 @@
     + DotsWave
     + SilkSky
     + BlackHole
+    + PointRibbon
 
 + https://github.com/Akashkamble/CanvasPlayground
     + 💫 RotatingSquares
