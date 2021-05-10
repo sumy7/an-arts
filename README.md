@@ -31,6 +31,7 @@
 + SilkSky
 + BlackHole
 + 💫 SnowFlakes
++ PointRibbon
 
 ## 特别感谢
 
@@ -43,6 +44,7 @@
     + DotsWave
     + SilkSky
     + BlackHole
+    + PointRibbon
 
 + https://github.com/Akashkamble/CanvasPlayground
     + 💫 RotatingSquares

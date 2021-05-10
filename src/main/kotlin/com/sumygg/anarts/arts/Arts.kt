@@ -22,6 +22,8 @@ import com.sumygg.anarts.arts.identicon.Identicon
 import com.sumygg.anarts.arts.identicon.IdenticonConfig
 import com.sumygg.anarts.arts.maze.Maze
 import com.sumygg.anarts.arts.maze.MazeConfig
+import com.sumygg.anarts.arts.pointribbon.PointRibbon
+import com.sumygg.anarts.arts.pointribbon.PointRibbonConfig
 import com.sumygg.anarts.arts.recursivetree.RecursiveTree
 import com.sumygg.anarts.arts.recursivetree.RecursiveTreeConfig
 import com.sumygg.anarts.arts.rotatingsquares.RotatingSquares
@@ -62,6 +64,7 @@ enum class Arts(
     SILKSKY("SilkSky", false, SilkSkyConfig::class, SilkSky::class),
     BLACKHOLE("BlackHole", false, BlackHoleConfig::class, BlackHole::class),
     SNOWFLAKES("SnowFlakes", true, SnowFlakesConfig::class, SnowFlakes::class),
+    POINT_RIBBON("PointRibbon", false, PointRibbonConfig::class, PointRibbon::class),
     ;
 
     companion object {
