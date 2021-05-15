@@ -2,6 +2,8 @@ package com.sumygg.anarts.arts
 
 import com.sumygg.anarts.arts.blackhole.BlackHole
 import com.sumygg.anarts.arts.blackhole.BlackHoleConfig
+import com.sumygg.anarts.arts.brownianmotion.BrownianMotion
+import com.sumygg.anarts.arts.brownianmotion.BrownianMotionConfig
 import com.sumygg.anarts.arts.circleanddotgrid.CircleAndDotGrid
 import com.sumygg.anarts.arts.circleanddotgrid.CircleAndDotGridConfig
 import com.sumygg.anarts.arts.circlegridscale.CircleGridScale
@@ -65,6 +67,7 @@ enum class Arts(
     BLACKHOLE("BlackHole", false, BlackHoleConfig::class, BlackHole::class),
     SNOWFLAKES("SnowFlakes", true, SnowFlakesConfig::class, SnowFlakes::class),
     POINT_RIBBON("PointRibbon", false, PointRibbonConfig::class, PointRibbon::class),
+    BROWNIAN_MOTION("BrownianMotion", true, BrownianMotionConfig::class, BrownianMotion::class),
     ;
 
     companion object {
