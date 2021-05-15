@@ -32,6 +32,7 @@
 + BlackHole
 + 💫 SnowFlakes
 + PointRibbon
++ 💫 BrownianMotion
 
 ## 特别感谢
 
@@ -69,6 +70,9 @@
 
 + https://p5js.org/examples/simulate-snowflakes.html
     + 💫 SnowFlakes
+
++ https://p5js.org/examples/simulate-brownian-motion.html
+    + 💫 BrownianMotion
 
 ## 贡献
 
