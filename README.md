@@ -33,6 +33,7 @@
 + 💫 SnowFlakes
 + PointRibbon
 + 💫 BrownianMotion
++ RandomChords
 
 ## 特别感谢
 
@@ -73,6 +74,9 @@
 
 + https://p5js.org/examples/simulate-brownian-motion.html
     + 💫 BrownianMotion
+
++ https://p5js.org/examples/math-random-chords.html
+    + RandomChords
 
 ## 贡献
 
