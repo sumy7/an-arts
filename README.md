@@ -51,6 +51,8 @@
   ![PointRibbon](screenshots/PointRibbon.jpg)
 + 💫 BrownianMotion
   ![BrownianMotion](screenshots/BrownianMotion.jpg)
++ RandomChords
+  ![RandomChords](screenshots/RandomChords.jpg)
 
 ## 特别感谢
 
@@ -91,6 +93,9 @@
 
 + https://p5js.org/examples/simulate-brownian-motion.html
     + 💫 BrownianMotion
+
++ https://p5js.org/examples/math-random-chords.html
+    + RandomChords
 
 ## 贡献
 
