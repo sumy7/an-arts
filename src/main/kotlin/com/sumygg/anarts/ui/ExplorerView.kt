@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.input.pointer.pointerMoveFilter
@@ -26,6 +27,7 @@ import com.sumygg.anarts.viewmodel.ArtsModel
 /**
  * 渲染一个左右分栏的界面，左边展示配置信息，右边展示输出结果
  */
+@ExperimentalComposeUiApi
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExplorerView() {
@@ -75,6 +77,7 @@ private fun ArtsConfigView(artsModel: ArtsModel) {
 /**
  * 渲染arts列表
  */
+@ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @Composable
 private fun ArtsListView(
@@ -101,7 +104,7 @@ private fun ArtsListView(
             }
 
             VerticalScrollbar(
-                rememberScrollbarAdapter(scrollState, sortedItems.size, lineHeight),
+                rememberScrollbarAdapter(scrollState),
                 Modifier.align(Alignment.CenterEnd),
             )
         }
@@ -112,6 +115,7 @@ private fun ArtsListView(
 /**
  * 渲染arts列表项
  */
+@ExperimentalComposeUiApi
 @Composable
 private fun ArtsListItemViewImpl(
     arts: Arts,
