@@ -3,8 +3,8 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.31"
-    id("org.jetbrains.compose") version "0.3.2"
+    kotlin("jvm") version "1.5.31"
+    id("org.jetbrains.compose") version "1.0.0"
 }
 
 group = "com.sumygg"
@@ -13,13 +13,12 @@ version = "1.0"
 repositories {
     jcenter()
     mavenCentral()
-    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
 }
 
 dependencies {
     testImplementation(kotlin("test-testng"))
     implementation(compose.desktop.currentOs)
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.31")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
 }
 
 tasks.test {

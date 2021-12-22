@@ -1,29 +1,28 @@
 package com.sumygg.anarts
 
-import androidx.compose.desktop.AppManager
-import androidx.compose.desktop.DesktopTheme
-import androidx.compose.desktop.Window
 import androidx.compose.material.MaterialTheme
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.window.Menu
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.MenuBar
-import androidx.compose.ui.window.MenuItem
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
 import com.sumygg.anarts.ui.ExplorerView
 
 /**
  * 程序入口
  */
-fun main() = Window(
-    title = "an-arts Explorer",
-    size = IntSize(800, 600),
-    menuBar = MenuBar(
-        Menu("Actions", MenuItem("Exit", onClick = {
-            AppManager.exit()
-        }))
-    )
-) {
-    MaterialTheme {
-        DesktopTheme {
+@ExperimentalComposeUiApi
+fun main() = application {
+    Window(
+        onCloseRequest = ::exitApplication,
+        title = "an-arts Explorer",
+        state = rememberWindowState(width = 800.dp, height = 600.dp)
+    ) {
+        MenuBar {
+            Menu("Actions") { Item("Exit", onClick = ::exitApplication) }
+        }
+        MaterialTheme {
             ExplorerView()
         }
     }
