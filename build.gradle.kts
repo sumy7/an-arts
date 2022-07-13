@@ -3,30 +3,35 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.31"
-    id("org.jetbrains.compose") version "1.0.0"
+    kotlin("multiplatform")
+    id("org.jetbrains.compose")
 }
 
 group = "com.sumygg"
 version = "1.0"
 
 repositories {
-    jcenter()
+    google()
     mavenCentral()
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
-dependencies {
-    testImplementation(kotlin("test-testng"))
-    implementation(compose.desktop.currentOs)
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
-}
-
-tasks.test {
-    useTestNG()
-}
-
-tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "15"
+kotlin {
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = "11"
+        }
+        withJava()
+    }
+    sourceSets {
+        val jvmMain by getting {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation("org.jetbrains.kotlin:kotlin-reflect:${extra["kotlin.version"]}")
+            }
+        }
+        val jvmTest by getting
+    }
 }
 
 compose.desktop {
