@@ -28,7 +28,7 @@ import com.sumygg.anarts.viewmodel.ArtsModel
  * 渲染一个左右分栏的界面，左边展示配置信息，右边展示输出结果
  */
 @ExperimentalComposeUiApi
-@OptIn(ExperimentalFoundationApi::class)
+@ExperimentalFoundationApi
 @Composable
 fun ExplorerView() {
     val artsModel by remember { mutableStateOf(ArtsModel(Arts.sortedValues.first())) }

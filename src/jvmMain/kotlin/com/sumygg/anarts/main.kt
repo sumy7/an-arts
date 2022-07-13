@@ -1,5 +1,6 @@
 package com.sumygg.anarts
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.unit.dp
@@ -12,6 +13,7 @@ import com.sumygg.anarts.ui.ExplorerView
 /**
  * 程序入口
  */
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 fun main() = application {
     Window(
