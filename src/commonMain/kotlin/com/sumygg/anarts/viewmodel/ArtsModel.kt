@@ -20,6 +20,9 @@ class ArtsModel(defaultArts: Arts) {
     var arts: BaseArts by mutableStateOf(defaultArts.createArts())
         private set
 
+    var isPlaying: Boolean by mutableStateOf(defaultArts.animated)
+        private set
+
     init {
         // 触发Arts初始化
         this.arts.onInit()
@@ -36,6 +39,17 @@ class ArtsModel(defaultArts: Arts) {
         val arts = artsType.createArts()
         arts.onInit()
         this.arts = arts
+        isPlaying = artsType.animated
     }
 
+    fun togglePlayback() {
+        if (artsType.animated) isPlaying = !isPlaying
+    }
+
+    /** Restores this artwork's defaults without resuming a paused animation. */
+    fun resetCurrent() {
+        val wasPlaying = isPlaying
+        switchTo(artsType)
+        isPlaying = wasPlaying
+    }
 }

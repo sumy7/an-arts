@@ -12,8 +12,8 @@ import androidx.compose.ui.window.rememberWindowState
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "an-arts Explorer",
-        state = rememberWindowState(width = 800.dp, height = 600.dp)
+        title = "an-arts — 生成艺术工作室",
+        state = rememberWindowState(width = 1280.dp, height = 840.dp)
     ) {
         MenuBar {
             Menu("Actions") { Item("Exit", onClick = ::exitApplication) }
