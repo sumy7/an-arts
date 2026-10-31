@@ -1,14 +1,14 @@
 # an-arts
 
-`an-arts` 是用来展示`生成式艺术和算法创作`的一个 Kotlin 程序。本程序旨在展示一些有意思的生成式艺术程序。
-基于 Compose Multiplatform，同一套绘图和参数界面可以运行在桌面和浏览器中。
+用 Kotlin 和 Compose Multiplatform 编写的生成式艺术工作室，包含 19 个算法作品。同一套绘图和参数界面支持 Desktop（JVM）与 Web（Wasm）。
 
-## 特性
+## 在线体验
 
-1. 基于 `Compose Multiplatform` 实现，支持 Desktop（JVM）和 Web（Wasm）
-1. 不断补充的Arts类型
-1. 支持图形展示和💫动画展示
-1. 方便调节的Arts参数，不同的参数带给你不一样的感受
+**[打开 GitHub Pages 演示](https://sumy7.github.io/an-arts/)**
+
+无需安装。选择作品、调整颜色或参数，即可查看实时效果；动画支持暂停和继续。项目通过在线演示展示作品，不再保存截图。
+
+浏览器需要支持 WasmGC；请使用近期版本的 Chrome、Edge、Firefox 或 Safari。首次打开需要加载绘图运行时，请稍候。
 
 ## 工作区界面
 
@@ -77,30 +77,31 @@ Web 测试使用本机 Chrome 的无头模式；找不到 Chrome 时可设置 `C
 新增作品时实现 `BaseArts`、定义 `ArtsConfig`，并在 `Arts` 中注册构造函数。
 参数面板由配置类的 `fields` 显式声明，支持文本、输入框、滑块、单选和颜色列表；两端共用支持透明度的选色浮层。
 
-## 已实现程序
+## 作品列表
 
-> **说明：**  
-> [ 💫 ] 为动画类型Arts
+在[在线演示](https://sumy7.github.io/an-arts/)的作品库中搜索下列名称，即可查看实际效果。
 
-+ CircleLoop
-+ Maze
-+ 💫 RotatingSquares
-+ 💫 CircleAndDotGrid
-+ 💫 CircleGridScale
-+ Yarn
-+ 💫 Hearts
-+ Identicon
-+ DotsWave
-+ CistercianNumerals
-+ 💫 CistercianClock
-+ 💫 VoidSetup
-+ RecursiveTree
-+ SilkSky
-+ BlackHole
-+ 💫 SnowFlakes
-+ PointRibbon
-+ 💫 BrownianMotion
-+ RandomChords
+| 动画作品 | 静态作品 |
+| --- | --- |
+| BrownianMotion · 布朗运动 | BlackHole · 黑洞 |
+| CircleAndDotGrid · 圆与点阵 | CircleLoop · 圆环回路 |
+| CircleGridScale · 呼吸圆阵 | CistercianNumerals · 西多会数字 |
+| CistercianClock · 西多会时钟 | DotsWave · 点的波浪 |
+| Hearts · 心形涟漪 | Identicon · 几何头像 |
+| RotatingSquares · 旋转方块 | Maze · 迷宫纹理 |
+| SnowFlakes · 飘雪 | PointRibbon · 点的缎带 |
+| VoidSetup · 太鼓回旋 | RandomChords · 随机和弦 |
+| | RecursiveTree · 递归树 |
+| | SilkSky · 丝绸天空 |
+| | Yarn · 线团 |
+
+## GitHub Pages 发布
+
+推送到 `main` 分支时，[Deploy GitHub Pages 工作流](https://github.com/sumy7/an-arts/actions/workflows/pages.yml)会自动构建并发布在线演示，也可以在 Actions 中手动运行。
+
+工作流使用 JDK 17 和项目自带的 Gradle Wrapper，执行 `wasmJsBrowserDistribution`，将 `build/dist/wasmJs/productionExecutable/` 作为 Pages artifact 部署。静态资源使用相对路径，支持 `/an-arts/` 这样的项目子路径。
+
+Fork 项目后，在仓库 **Settings → Pages → Build and deployment** 中选择 **GitHub Actions**，并将上述演示和工作流链接中的用户名、仓库名改为自己的地址。
 
 ## 特别感谢
 
@@ -116,31 +117,31 @@ Web 测试使用本机 Chrome 的无头模式；找不到 Chrome 时可设置 `C
     + PointRibbon
 
 + https://github.com/Akashkamble/CanvasPlayground
-    + 💫 RotatingSquares
-    + 💫 CircleAndDotGrid
-    + 💫 CircleGridScale
+    + RotatingSquares
+    + CircleAndDotGrid
+    + CircleGridScale
 
 + https://codepen.io/giaco/pen/BbpKZy
-    + 💫 Hearts
+    + Hearts
 
 + https://github.com/stewartlord/identicon.js
     + Identicon
 
 + https://github.com/ednl/cistercian-clock/blob/main/sketch.js
     + CistercianNumerals
-    + 💫 CistercianClock
+    + CistercianClock
 
 + https://sumygg.com/2018/07/31/p5js-version-for-taiko-drum-master-song-void-setup/
-    + 💫 VoidSetup
+    + VoidSetup
 
 + https://p5js.org/examples/simulate-recursive-tree.html
     + RecursiveTree
 
 + https://p5js.org/examples/simulate-snowflakes.html
-    + 💫 SnowFlakes
+    + SnowFlakes
 
 + https://p5js.org/examples/simulate-brownian-motion.html
-    + 💫 BrownianMotion
+    + BrownianMotion
 
 + https://p5js.org/examples/math-random-chords.html
     + RandomChords
