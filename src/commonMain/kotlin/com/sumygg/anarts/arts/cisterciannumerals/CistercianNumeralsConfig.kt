@@ -28,6 +28,6 @@ class CistercianNumeralsConfig : ArtsConfig() {
     override val fields = listOf(
         FormField.ColorChoose(title = "background", state = background),
         FormField.ColorChoose(title = "foreground", state = foreground),
-        FormField.IntSlider(title = "number", min = 0f, max = 9999f, steps = 9999, state = number),
+        FormField.IntSlider(title = "number", min = 0f, max = 9999f, steps = 9998, state = number),
     )
 }

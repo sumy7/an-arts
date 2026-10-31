@@ -3,6 +3,7 @@ package com.sumygg.anarts.ui
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,7 +11,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,7 +21,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.layout.onSizeChanged
@@ -61,7 +60,7 @@ fun ExplorerView(darkTheme: Boolean, onToggleTheme: () -> Unit) {
 
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val layout = workspaceLayout(maxWidth.value)
-        val sheetWidth = minOf(320.dp, maxWidth - 24.dp)
+        val sheetWidth = minOf(320.dp, maxWidth - 32.dp)
         LaunchedEffect(layout) { workspace.onLayoutChanged(layout) }
         LaunchedEffect(workspace.overlay) {
             if (workspace.overlay != null) {
@@ -170,16 +169,16 @@ fun ExplorerView(darkTheme: Boolean, onToggleTheme: () -> Unit) {
             ).background(Color.Black.copy(alpha = 0.48f)).semantics { contentDescription = "关闭侧栏" })
             Surface(
                 modifier = Modifier.align(if (panel == WorkspacePanel.Library) Alignment.CenterStart else Alignment.CenterEnd)
-                    .padding(12.dp).width(sheetWidth).fillMaxHeight()
+                    .width(sheetWidth).fillMaxHeight()
                     .onPreviewKeyEvent(handleShortcut)
                     .focusRequester(panelFocus)
                     .focusProperties { onExit = { if (workspace.overlay != null && colorEditor.request == null) cancelFocusChange() } }
                     .focusGroup()
                     .semantics { paneTitle = if (panel == WorkspacePanel.Library) "作品库" else "参数" },
-                shape = RoundedCornerShape(12.dp),
-                color = palette.sidebar,
+                shape = RoundedCornerShape(0.dp),
+                color = MaterialTheme.colors.surface,
                 border = BorderStroke(1.dp, palette.border),
-                elevation = 12.dp,
+                elevation = 8.dp,
             ) {
                 if (panel == WorkspacePanel.Library) library() else inspector()
             }
@@ -217,7 +216,7 @@ private fun WorkspaceHeader(
 ) {
     val palette = LocalWorkspacePalette.current
     Row(
-        Modifier.fillMaxWidth().height(48.dp).zIndex(2f).background(palette.sidebar).padding(horizontal = if (compact) 4.dp else 20.dp),
+        Modifier.fillMaxWidth().height(56.dp).zIndex(2f).background(MaterialTheme.colors.surface).padding(horizontal = if (compact) 4.dp else 20.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (compact) WorkspaceIconButton(ArtIcons.List, "打开作品库", onLibrary)
@@ -246,44 +245,70 @@ private fun ArtworkLibrary(
     Column(Modifier.fillMaxSize().background(palette.sidebar)) {
         Row(Modifier.fillMaxWidth().height(56.dp).zIndex(2f).padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("作品库", style = MaterialTheme.typography.subtitle2)
-            Text("${Arts.entries.size}", Modifier.padding(start = 8.dp), color = palette.muted, style = MaterialTheme.typography.caption)
+            Text("${Arts.entries.size}", Modifier.padding(start = 8.dp)
+                .background(palette.selection, RoundedCornerShape(5.dp)).padding(horizontal = 6.dp, vertical = 1.dp),
+                color = palette.muted, style = MaterialTheme.typography.caption)
             Spacer(Modifier.weight(1f))
             WorkspaceIconButton(ArtIcons.Close, "关闭作品库", onClose)
         }
-        BasicTextField(
-            value = query, onValueChange = onQueryChange, singleLine = true,
-            modifier = Modifier.padding(horizontal = 12.dp).fillMaxWidth().height(40.dp)
-                .focusRequester(searchFocus).semantics { contentDescription = "搜索作品" },
-            textStyle = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.onSurface),
-            cursorBrush = SolidColor(MaterialTheme.colors.primary),
-            decorationBox = { input ->
-                Row(
-                    Modifier.fillMaxSize().clip(RoundedCornerShape(6.dp)).background(palette.raised)
-                        .border(1.dp, palette.border, RoundedCornerShape(6.dp)).padding(horizontal = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(ArtIcons.Search, null, Modifier.size(16.dp), tint = palette.muted)
-                    Spacer(Modifier.width(8.dp))
-                    Box(Modifier.weight(1f)) {
-                        if (query.isEmpty()) Text("搜索作品…", color = palette.muted, style = MaterialTheme.typography.body2)
-                        input()
-                    }
-                    if (query.isNotEmpty()) IconButton(onClick = { onQueryChange("") }, modifier = Modifier.size(28.dp)) {
-                        Icon(ArtIcons.Close, "清除搜索", Modifier.size(14.dp), tint = palette.muted)
-                    }
+        ShadcnInput(
+            value = query, onValueChange = onQueryChange,
+            label = "搜索作品", placeholder = "搜索作品…",
+            modifier = Modifier.padding(horizontal = 12.dp).fillMaxWidth().focusRequester(searchFocus),
+            leading = { Icon(ArtIcons.Search, null, Modifier.size(16.dp), tint = palette.muted) },
+            trailing = {
+                if (query.isNotEmpty()) {
+                    ShadcnIconButton(ArtIcons.Close, "清除搜索", { onQueryChange("") }, modifier = Modifier.size(28.dp))
                 }
             },
         )
-        Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            ArtworkFilter.entries.forEach { item ->
+        val filterFocus = remember { ArtworkFilter.entries.map { FocusRequester() } }
+        var filterFocusRequest by remember { mutableStateOf<ArtworkFilter?>(null) }
+        LaunchedEffect(filter, filterFocusRequest) {
+            if (filterFocusRequest == filter) {
+                withFrameNanos { }
+                filterFocus[filter.ordinal].requestFocus()
+                filterFocusRequest = null
+            }
+        }
+        Row(Modifier.fillMaxWidth().padding(12.dp)
+            .background(palette.selection, RoundedCornerShape(8.dp)).padding(3.dp),
+            horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+            ArtworkFilter.entries.forEachIndexed { index, item ->
                 val label = when (item) { ArtworkFilter.All -> "全部"; ArtworkFilter.Animated -> "动态"; ArtworkFilter.Static -> "静态" }
+                val interactions = remember { MutableInteractionSource() }
+                val hovered by interactions.collectIsHoveredAsState()
+                val focused by interactions.collectIsFocusedAsState()
                 Box(
-                    Modifier.weight(1f).height(32.dp).clip(RoundedCornerShape(6.dp))
-                        .background(if (item == filter) palette.selection else Color.Transparent)
-                        .selectable(item == filter, role = Role.Tab, onClick = { onFilterChange(item) }),
+                    Modifier.weight(1f).height(30.dp).focusRequester(filterFocus[index])
+                        .focusProperties { canFocus = item == filter }
+                        .onPreviewKeyEvent { event ->
+                            val next = if (event.type == KeyEventType.KeyDown &&
+                                !event.isCtrlPressed && !event.isMetaPressed && !event.isAltPressed && !event.isShiftPressed) when (event.key) {
+                                Key.DirectionRight -> (index + 1) % ArtworkFilter.entries.size
+                                Key.DirectionLeft -> (index + ArtworkFilter.entries.size - 1) % ArtworkFilter.entries.size
+                                Key.MoveHome -> 0
+                                Key.MoveEnd -> ArtworkFilter.entries.lastIndex
+                                else -> null
+                            } else null
+                            if (next != null) {
+                                val nextFilter = ArtworkFilter.entries[next]
+                                onFilterChange(nextFilter)
+                                filterFocusRequest = nextFilter
+                                true
+                            } else false
+                        }
+                        .clip(RoundedCornerShape(5.dp))
+                        .background(if (item == filter) MaterialTheme.colors.surface else if (hovered) palette.raised else Color.Transparent)
+                        .then(if (focused) Modifier.border(2.dp, palette.ring, RoundedCornerShape(5.dp)) else Modifier)
+                        .hoverable(interactions)
+                        .selectable(item == filter, interactionSource = interactions, indication = null,
+                            role = Role.Tab, onClick = { onFilterChange(item) }),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(label, color = if (item == filter) MaterialTheme.colors.primary else palette.muted, style = MaterialTheme.typography.caption)
+                    Text(label, color = if (item == filter) MaterialTheme.colors.onSurface else palette.muted,
+                        fontWeight = if (item == filter) FontWeight.Medium else FontWeight.Normal,
+                        style = MaterialTheme.typography.caption)
                 }
             }
         }
@@ -292,7 +317,8 @@ private fun ArtworkLibrary(
                 Icon(ArtIcons.Search, null, Modifier.padding(vertical = 16.dp).size(28.dp), tint = palette.muted)
                 Text("未找到作品", style = MaterialTheme.typography.subtitle2)
                 Text("试试其他关键词或筛选条件", color = palette.muted, style = MaterialTheme.typography.caption)
-                TextButton(onClick = { onQueryChange(""); onFilterChange(ArtworkFilter.All) }) { Text("清除筛选") }
+                ShadcnButton(onClick = { onQueryChange(""); onFilterChange(ArtworkFilter.All) },
+                    modifier = Modifier.padding(top = 12.dp), variant = ShadcnButtonVariant.Outline) { Text("清除筛选") }
             }
         } else {
             val scrollState = rememberLazyListState()
@@ -300,19 +326,26 @@ private fun ArtworkLibrary(
                 LazyColumn(Modifier.fillMaxSize().padding(horizontal = 8.dp), state = scrollState, verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     items(artworks, key = { it.name }) { art ->
                         val active = art == selected
+                        val interactions = remember { MutableInteractionSource() }
+                        val hovered by interactions.collectIsHoveredAsState()
+                        val focused by interactions.collectIsFocusedAsState()
                         Row(
-                            Modifier.fillMaxWidth().height(52.dp).clip(RoundedCornerShape(6.dp))
-                                .background(if (active) palette.selection else Color.Transparent)
-                                .selectable(active, role = Role.Button, onClick = { onSelect(art) })
+                            Modifier.fillMaxWidth().height(56.dp).clip(RoundedCornerShape(6.dp))
+                                .background(if (active || hovered) palette.selection else Color.Transparent)
+                                .then(if (focused) Modifier.border(2.dp, palette.ring, RoundedCornerShape(6.dp)) else Modifier)
+                                .hoverable(interactions)
+                                .selectable(active, interactionSource = interactions, indication = null,
+                                    role = Role.Button, onClick = { onSelect(art) })
                                 .semantics { contentDescription = "${art.info.title}，${art.artsName}，${if (art.animated) "动画作品" else "静态作品"}" }
                                 .padding(horizontal = 10.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Icon(ArtIcons.Artwork, null, Modifier.size(18.dp), tint = if (active) MaterialTheme.colors.primary else palette.muted)
+                            Icon(ArtIcons.Artwork, null, Modifier.size(18.dp), tint = if (active) MaterialTheme.colors.onSurface else palette.muted)
                             Spacer(Modifier.width(10.dp))
                             Column(Modifier.weight(1f)) {
                                 Text(art.info.title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.body2,
-                                    color = if (active) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface)
+                                    color = MaterialTheme.colors.onSurface,
+                                    fontWeight = if (active) FontWeight.Medium else FontWeight.Normal)
                                 Text(art.artsName, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.caption, color = palette.muted)
                             }
                             if (art.animated) Icon(ArtIcons.Play, null, Modifier.size(12.dp), tint = palette.muted)
@@ -356,11 +389,7 @@ private fun CanvasToolbar(model: ArtsModel) {
         }
         WorkspaceIconButton(ArtIcons.Reset, "重置当前作品", { model.resetCurrent() })
         if (model.artsType.animated) {
-            Button(
-                onClick = { model.togglePlayback() }, modifier = Modifier.height(36.dp),
-                contentPadding = PaddingValues(horizontal = 12.dp), elevation = null,
-                colors = ButtonDefaults.buttonColors(backgroundColor = palette.selection, contentColor = MaterialTheme.colors.primary),
-            ) {
+            ShadcnButton(onClick = { model.togglePlayback() }) {
                 Icon(if (model.isPlaying) ArtIcons.Pause else ArtIcons.Play, null, Modifier.size(16.dp))
                 Spacer(Modifier.width(6.dp))
                 Text(if (model.isPlaying) "暂停" else "播放")
@@ -381,12 +410,46 @@ private fun CanvasStage(
             Box(Modifier.size(6.dp).background(if (model.isPlaying) MaterialTheme.colors.primary else palette.muted, CircleShape))
             Text(if (model.artsType.animated) "动画预览" else "静态预览", Modifier.padding(start = 7.dp), color = palette.muted, style = MaterialTheme.typography.caption)
             Spacer(Modifier.weight(1f))
-            listOf(true to "1:1", false to "自适应").forEach { (value, title) ->
-                Box(Modifier.height(30.dp).clip(RoundedCornerShape(5.dp))
-                    .background(if (value == square) palette.raised else Color.Transparent)
-                    .selectable(value == square, role = Role.RadioButton, onClick = { onSquareChange(value) })
-                    .padding(horizontal = 10.dp), contentAlignment = Alignment.Center) {
-                    Text(title, color = if (value == square) MaterialTheme.colors.onSurface else palette.muted, style = MaterialTheme.typography.caption)
+            val aspectFocus = remember { List(2) { FocusRequester() } }
+            var aspectFocusRequest by remember { mutableStateOf<Int?>(null) }
+            LaunchedEffect(square, aspectFocusRequest) {
+                val index = aspectFocusRequest
+                if (index != null && (index == 0) == square) {
+                    withFrameNanos { }
+                    aspectFocus[index].requestFocus()
+                    aspectFocusRequest = null
+                }
+            }
+            Row(Modifier.border(1.dp, palette.border, RoundedCornerShape(6.dp)).padding(2.dp)) {
+                listOf(true to "1:1", false to "自适应").forEachIndexed { index, (value, title) ->
+                    val interactions = remember { MutableInteractionSource() }
+                    val hovered by interactions.collectIsHoveredAsState()
+                    val focused by interactions.collectIsFocusedAsState()
+                    Box(Modifier.height(28.dp).focusRequester(aspectFocus[index])
+                        .focusProperties { canFocus = value == square }.clip(RoundedCornerShape(4.dp))
+                        .background(if (value == square || hovered) palette.selection else Color.Transparent)
+                        .then(if (focused) Modifier.border(2.dp, palette.ring, RoundedCornerShape(4.dp)) else Modifier)
+                        .hoverable(interactions)
+                        .onPreviewKeyEvent { event ->
+                            val next = if (event.type == KeyEventType.KeyDown &&
+                                !event.isCtrlPressed && !event.isMetaPressed && !event.isAltPressed && !event.isShiftPressed) when (event.key) {
+                                Key.DirectionLeft, Key.DirectionRight -> 1 - index
+                                Key.MoveHome -> 0
+                                Key.MoveEnd -> 1
+                                else -> null
+                            } else null
+                            if (next != null) {
+                                onSquareChange(next == 0)
+                                aspectFocusRequest = next
+                                true
+                            } else false
+                        }
+                        .selectable(value == square, interactionSource = interactions, indication = null,
+                            role = Role.RadioButton, onClick = { onSquareChange(value) })
+                        .padding(horizontal = 10.dp), contentAlignment = Alignment.Center) {
+                        Text(title, color = if (value == square) MaterialTheme.colors.onSurface else palette.muted,
+                            style = MaterialTheme.typography.caption)
+                    }
                 }
             }
         }
@@ -394,7 +457,7 @@ private fun CanvasStage(
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
             val frameModifier = if (square) Modifier.size(minOf(maxWidth, maxHeight)) else Modifier.fillMaxSize()
             Box(frameModifier
-                .border(1.dp, if (canvasFocused) MaterialTheme.colors.primary.copy(alpha = 0.6f) else palette.border, RoundedCornerShape(4.dp))
+                .border(1.dp, if (canvasFocused) palette.ring else palette.border, RoundedCornerShape(4.dp))
                 .padding(1.dp)
                 .focusRequester(canvasFocus)
                 .onFocusChanged { canvasFocused = it.isFocused }
@@ -430,13 +493,14 @@ private fun WorkspaceStatus(model: ArtsModel, canvasSize: IntSize, layout: Works
 
 @Composable
 private fun WorkspaceIconButton(icon: ImageVector, label: String, onClick: () -> Unit, active: Boolean = false) {
-    val palette = LocalWorkspacePalette.current
     val interactions = remember { MutableInteractionSource() }
     val hovered by interactions.collectIsHoveredAsState()
+    var focused by remember { mutableStateOf(false) }
     var showHint by remember { mutableStateOf(false) }
-    LaunchedEffect(hovered) {
+    LaunchedEffect(hovered, focused) {
         showHint = false
-        if (hovered) {
+        if (focused) showHint = true
+        else if (hovered) {
             delay(500)
             showHint = true
         }
@@ -445,18 +509,22 @@ private fun WorkspaceIconButton(icon: ImageVector, label: String, onClick: () ->
     var alignRight by remember { mutableStateOf(false) }
     Box(Modifier.size(44.dp).hoverable(interactions).zIndex(if (showHint) 1f else 0f)
         .onGloballyPositioned { alignRight = it.positionInRoot().x > windowWidth / 2 }) {
-        IconButton(onClick = onClick, modifier = Modifier.size(44.dp).padding(2.dp)
-            .clip(RoundedCornerShape(6.dp)).background(if (active) palette.selection else Color.Transparent)) {
-            Icon(icon, label, Modifier.size(19.dp), tint = if (active) MaterialTheme.colors.primary else palette.muted)
-        }
+        ShadcnIconButton(icon, label, onClick, active,
+            modifier = Modifier.align(Alignment.Center).size(36.dp)
+                .onFocusChanged { focused = it.isFocused }
+                .onPreviewKeyEvent {
+                    if (it.key == Key.Escape && it.type == KeyEventType.KeyDown && showHint) {
+                        showHint = false; true
+                    } else false
+                })
         if (showHint) {
             Surface(
                 modifier = Modifier.align(if (alignRight) Alignment.TopEnd else Alignment.TopStart)
                     .offset(y = 44.dp).wrapContentSize(if (alignRight) Alignment.TopEnd else Alignment.TopStart, unbounded = true),
-                color = palette.raised, shape = RoundedCornerShape(6.dp), border = BorderStroke(1.dp, palette.border),
+                color = MaterialTheme.colors.onSurface, shape = RoundedCornerShape(6.dp),
             ) {
                 Text(label, Modifier.widthIn(max = 260.dp).padding(horizontal = 10.dp, vertical = 6.dp),
-                    style = MaterialTheme.typography.caption, color = MaterialTheme.colors.onSurface)
+                    style = MaterialTheme.typography.caption, color = MaterialTheme.colors.surface)
             }
         }
     }

@@ -6,6 +6,18 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.key.*
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -33,28 +45,26 @@ fun ComposeFormItem(field: FormField) {
         when (field) {
             is FormField.Text -> {
                 FieldLabel(fieldLabel(field.title))
-                OutlinedTextField(
+                ShadcnInput(
                     value = field.state.value,
                     onValueChange = {},
                     enabled = false,
-                    singleLine = true,
                     modifier = Modifier.fillMaxWidth().semantics { contentDescription = fieldLabel(field.title) },
-                    textStyle = MaterialTheme.typography.body2,
+                    label = fieldLabel(field.title),
                 )
             }
             is FormField.Input -> {
                 FieldLabel(fieldLabel(field.title))
-                OutlinedTextField(
+                ShadcnInput(
                     value = field.state.value,
                     onValueChange = { field.state.value = it },
-                    singleLine = true,
                     modifier = Modifier.fillMaxWidth().semantics { contentDescription = fieldLabel(field.title) },
-                    textStyle = MaterialTheme.typography.body2,
+                    label = fieldLabel(field.title),
                 )
             }
             is FormField.Slider -> {
                 FieldLabel(fieldLabel(field.title), numberLabel(field.state.value))
-                Slider(
+                ShadcnSlider(
                     value = field.state.value,
                     onValueChange = { field.state.value = it },
                     valueRange = field.min..field.max,
@@ -65,9 +75,9 @@ fun ComposeFormItem(field: FormField) {
             }
             is FormField.IntSlider -> {
                 FieldLabel(fieldLabel(field.title), field.state.value.toString())
-                Slider(
+                ShadcnSlider(
                     value = field.state.value.toFloat(),
-                    onValueChange = { field.state.value = it.toInt() },
+                    onValueChange = { field.state.value = it.roundToInt() },
                     valueRange = field.min..field.max,
                     steps = field.steps,
                     modifier = Modifier.fillMaxWidth().semantics { contentDescription = fieldLabel(field.title) },
@@ -80,30 +90,13 @@ fun ComposeFormItem(field: FormField) {
             }
             is FormField.Radio -> {
                 FieldLabel(fieldLabel(field.title))
-                field.values.forEach { value ->
-                    val selected = field.state.value == value
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(if (selected) MaterialTheme.colors.primary.copy(alpha = 0.10f) else Color.Transparent)
-                            .selectable(selected, role = Role.RadioButton, onClick = { field.state.value = value })
-                            .heightIn(min = 44.dp)
-                            .padding(horizontal = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    ) {
-                        RadioButton(selected = selected, onClick = null, modifier = Modifier.size(20.dp))
-                        Text(value, style = MaterialTheme.typography.body2)
-                    }
-                }
+                ShadcnRadioGroup(field.values, field.state.value) { field.state.value = it }
             }
             is FormField.ColorList -> {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Text(fieldLabel(field.title), style = MaterialTheme.typography.body2, fontWeight = FontWeight.Medium)
                     Spacer(Modifier.weight(1f))
-                    IconButton(onClick = { field.state.add(Color.Black) }, modifier = Modifier.size(44.dp)) {
-                        Icon(ArtIcons.Add, contentDescription = "添加颜色", modifier = Modifier.size(18.dp))
-                    }
+                    ShadcnIconButton(ArtIcons.Add, "添加颜色", { field.state.add(Color.Black) })
                 }
                 field.state.forEachIndexed { index, color ->
                     Row(
@@ -115,17 +108,60 @@ fun ComposeFormItem(field: FormField) {
                             ColorButton("第 ${index + 1} 个颜色", color) { field.state[index] = it }
                         }
                         if (field.canEmpty || field.state.size > 1) {
-                            IconButton(onClick = { field.state.removeAt(index) }, modifier = Modifier.size(44.dp)) {
-                                Icon(
-                                    ArtIcons.Delete,
-                                    contentDescription = "删除第 ${index + 1} 个颜色",
-                                    tint = LocalWorkspacePalette.current.muted,
-                                    modifier = Modifier.size(18.dp),
-                                )
-                            }
+                            ShadcnIconButton(ArtIcons.Delete, "删除第 ${index + 1} 个颜色", { field.state.removeAt(index) })
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ShadcnRadioGroup(values: List<String>, selected: String, onSelect: (String) -> Unit) {
+    val requesters = remember(values) { values.map { FocusRequester() } }
+    val palette = LocalWorkspacePalette.current
+    var pendingFocus by remember { mutableStateOf<Int?>(null) }
+    LaunchedEffect(pendingFocus, selected) {
+        pendingFocus?.let { index ->
+            withFrameNanos { }
+            requesters[index].requestFocus()
+            pendingFocus = null
+        }
+    }
+    Column(Modifier.selectableGroup(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        values.forEachIndexed { index, value ->
+            val interactions = remember { MutableInteractionSource() }
+            val hovered by interactions.collectIsHoveredAsState()
+            var focused by remember { mutableStateOf(false) }
+            val active = value == selected
+            Row(Modifier.fillMaxWidth().heightIn(min = 36.dp)
+                .focusRequester(requesters[index]).focusProperties { canFocus = active }
+                .onFocusChanged { focused = it.isFocused }
+                .onPreviewKeyEvent { event ->
+                    if (event.type != KeyEventType.KeyDown || event.isAltPressed || event.isCtrlPressed || event.isMetaPressed) false
+                    else {
+                        val target = when (event.key) {
+                            Key.DirectionDown, Key.DirectionRight -> (index + 1) % values.size
+                            Key.DirectionUp, Key.DirectionLeft -> (index - 1 + values.size) % values.size
+                            Key.MoveHome -> 0
+                            Key.MoveEnd -> values.lastIndex
+                            else -> -1
+                        }
+                        if (target < 0) false else { onSelect(values[target]); pendingFocus = target; true }
+                    }
+                }
+                .border(if (focused) 2.dp else 1.dp, if (focused) palette.ring else Color.Transparent, RoundedCornerShape(6.dp))
+                .clip(RoundedCornerShape(6.dp)).background(if (hovered) palette.selection else Color.Transparent)
+                .selectable(active, interactions, indication = null, role = Role.RadioButton, onClick = { onSelect(value) })
+                .padding(horizontal = 6.dp),
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                val foreground = MaterialTheme.colors.onSurface
+                Canvas(Modifier.size(16.dp)) {
+                    drawCircle(foreground, radius = 7.dp.toPx(), style = androidx.compose.ui.graphics.drawscope.Stroke(1.dp.toPx()))
+                    if (active) drawCircle(foreground, radius = 4.dp.toPx())
+                }
+                Text(value, style = MaterialTheme.typography.body2)
             }
         }
     }
@@ -153,61 +189,25 @@ private fun RangeLabels(min: String, max: String) {
 @Composable
 private fun ColorButton(label: String, color: Color, onColorChange: (Color) -> Unit) {
     val editor = LocalColorEditor.current
-    OutlinedButton(
-        onClick = { editor.open(color, onColorChange) },
-        modifier = Modifier.fillMaxWidth().heightIn(min = 44.dp)
+    var anchor by remember { mutableStateOf(Rect.Zero) }
+    val triggerFocus = remember { FocusRequester() }
+    var attached by remember { mutableStateOf(true) }
+    DisposableEffect(Unit) { onDispose { attached = false } }
+    ShadcnButton(
+        onClick = { editor.open(color, onColorChange, anchor, onRestoreFocus = {
+            if (attached) triggerFocus.requestFocus() else false
+        }) },
+        modifier = Modifier.fillMaxWidth().heightIn(min = 36.dp)
+            .focusRequester(triggerFocus)
+            .onGloballyPositioned { anchor = it.boundsInRoot() }
             .semantics { contentDescription = "$label，${color.toHexString()}，编辑颜色" },
-        shape = RoundedCornerShape(6.dp),
-        colors = ButtonDefaults.outlinedButtonColors(
-            backgroundColor = MaterialTheme.colors.surface,
-            contentColor = MaterialTheme.colors.onSurface,
-        ),
-        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp),
+        variant = ShadcnButtonVariant.Outline,
     ) {
         ColorSwatch(color, Modifier.size(22.dp))
         Spacer(Modifier.width(10.dp))
         Text(color.toHexString(), style = MaterialTheme.typography.caption, fontFamily = FontFamily.Monospace)
         Spacer(Modifier.weight(1f))
-        Text("编辑", style = MaterialTheme.typography.caption, color = LocalWorkspacePalette.current.muted)
-    }
-}
-
-@Composable
-internal fun ColorEditorContent(initialColor: Color, onApply: (Color) -> Unit, onCancel: () -> Unit) {
-    var draft by remember { mutableStateOf(initialColor) }
-    Column(Modifier.padding(24.dp)) {
-        Text("编辑颜色", style = MaterialTheme.typography.h6)
-        Spacer(Modifier.height(20.dp))
-        Column(
-            Modifier.weight(1f, fill = false).fillMaxWidth().verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            ColorSwatch(draft, Modifier.fillMaxWidth().height(48.dp))
-            Text(draft.toHexString(), style = MaterialTheme.typography.body2, fontFamily = FontFamily.Monospace)
-            ColorChannel("R · 红色", draft.red) { draft = draft.copy(red = it) }
-            ColorChannel("G · 绿色", draft.green) { draft = draft.copy(green = it) }
-            ColorChannel("B · 蓝色", draft.blue) { draft = draft.copy(blue = it) }
-            ColorChannel("A · 透明度", draft.alpha) { draft = draft.copy(alpha = it) }
-        }
-        Spacer(Modifier.height(16.dp))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            TextButton(onClick = onCancel) { Text("取消") }
-            Spacer(Modifier.width(8.dp))
-            TextButton(onClick = { onApply(draft) }) { Text("应用颜色") }
-        }
-    }
-}
-
-@Composable
-private fun ColorChannel(label: String, value: Float, onValueChange: (Float) -> Unit) {
-    Column {
-        FieldLabel(label, (value * 255).roundToInt().toString())
-        Slider(
-            value = value,
-            onValueChange = onValueChange,
-            steps = 254,
-            modifier = Modifier.fillMaxWidth().semantics { contentDescription = label },
-        )
+        Text("选择", style = MaterialTheme.typography.caption, color = LocalWorkspacePalette.current.muted)
     }
 }
 

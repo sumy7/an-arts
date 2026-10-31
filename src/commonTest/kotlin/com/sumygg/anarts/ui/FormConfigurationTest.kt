@@ -34,7 +34,7 @@ class FormConfigurationTest {
         val number = assertIs<FormField.IntSlider>(config.fields.last())
         assertEquals(0f, number.min)
         assertEquals(9999f, number.max)
-        assertEquals(9999, number.steps)
+        assertEquals(1f, (number.max - number.min) / (number.steps + 1))
         number.state.value = 9999
         assertEquals(9999, config.number.value)
     }
