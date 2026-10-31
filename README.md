@@ -4,7 +4,7 @@
 
 ## 在线体验
 
-**[打开 GitHub Pages 演示](https://sumy7.github.io/an-arts/)**
+**[打开 GitHub Pages 演示](https://sumygg.com/an-arts/)**
 
 无需安装。选择作品、调整颜色或参数，即可查看实时效果；动画支持暂停和继续。项目通过在线演示展示作品，不再保存截图。
 
@@ -79,7 +79,7 @@ Web 测试使用本机 Chrome 的无头模式；找不到 Chrome 时可设置 `C
 
 ## 作品列表
 
-在[在线演示](https://sumy7.github.io/an-arts/)的作品库中搜索下列名称，即可查看实际效果。
+在[在线演示](https://sumygg.com/an-arts/)的作品库中搜索下列名称，即可查看实际效果。
 
 | 动画作品 | 静态作品 |
 | --- | --- |
@@ -101,7 +101,7 @@ Web 测试使用本机 Chrome 的无头模式；找不到 Chrome 时可设置 `C
 
 工作流使用 JDK 17 和项目自带的 Gradle Wrapper，执行 `wasmJsBrowserDistribution`，将 `build/dist/wasmJs/productionExecutable/` 作为 Pages artifact 部署。静态资源使用相对路径，支持 `/an-arts/` 这样的项目子路径。
 
-Fork 项目后，在仓库 **Settings → Pages → Build and deployment** 中选择 **GitHub Actions**，并将上述演示和工作流链接中的用户名、仓库名改为自己的地址。
+Fork 项目后，在仓库 **Settings → Pages → Build and deployment** 中选择 **GitHub Actions**，并替换为自己的 Pages 地址，同时更新工作流链接中的用户名和仓库名。
 
 ## 特别感谢
 
