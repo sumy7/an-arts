@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
 import com.sumygg.anarts.arts.ArtsConfig
 import com.sumygg.anarts.arts.BaseArts
+import kotlin.math.sqrt
 
 /**
  * 绘制CircleAndDotGrid
@@ -17,6 +18,7 @@ import com.sumygg.anarts.arts.BaseArts
 class CircleAndDotGrid : BaseArts("CircleAndDotGrid") {
 
     private var angle by mutableStateOf(0f)
+    private val outline = Stroke(width = 3f)
 
     override fun onInit() {
 
@@ -39,27 +41,42 @@ class CircleAndDotGrid : BaseArts("CircleAndDotGrid") {
             val spacing = circleRadius + n / 3
             val dotRadius = circleRadius / 7
             val diff = spacing - circleRadius
+            val foreground = config.foreground.value
+            val brush = SolidColor(foreground)
+            val frameAngle = angle
+            val circleExtent = circleRadius + 1.5f + 1f
+            // The dot rotates around (x, y - spacing), rather than the circle center.
+            val dotExtent = sqrt(diff * diff + circleRadius * circleRadius) + dotRadius + 1f
+            val horizontalExtent = maxOf(circleExtent, dotExtent)
+            val topExtent = maxOf(circleExtent, spacing + dotExtent)
             var offsetX = 0f
             var offsetY = 0f
             for (row in 0..n) {
+                if (offsetY - topExtent > size.height) break
                 for (col in 0..n) {
-                    drawCircle(
-                        SolidColor(config.foreground.value),
-                        radius = circleRadius,
-                        center = Offset(offsetX, offsetY),
-                        style = Stroke(width = 3f)
-                    )
-                    withTransform({
-                        rotate(
-                            (angle + (row * col) + (col + row) * 15) % 360,
-                            Offset(offsetX, offsetY - diff - circleRadius)
-                        )
-                    }) {
+                    if (offsetX - horizontalExtent > size.width) break
+                    if (offsetX - circleExtent <= size.width && offsetY - circleExtent <= size.height) {
                         drawCircle(
-                            color = config.foreground.value,
-                            radius = dotRadius,
-                            center = Offset(offsetX - diff, offsetY - diff)
+                            brush,
+                            radius = circleRadius,
+                            center = Offset(offsetX, offsetY),
+                            style = outline
                         )
+                    }
+                    if (offsetX - dotExtent <= size.width && offsetY - spacing - dotExtent <= size.height &&
+                        offsetY - spacing + dotExtent >= 0f) {
+                        withTransform({
+                            rotate(
+                                (frameAngle + (row * col) + (col + row) * 15) % 360,
+                                Offset(offsetX, offsetY - diff - circleRadius)
+                            )
+                        }) {
+                            drawCircle(
+                                color = foreground,
+                                radius = dotRadius,
+                                center = Offset(offsetX - diff, offsetY - diff)
+                            )
+                        }
                     }
                     offsetX += spacing
                 }

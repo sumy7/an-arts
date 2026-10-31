@@ -20,6 +20,7 @@ class CircleGridScale : BaseArts("CircleGridScale") {
     private var scale by mutableStateOf(0f)
     private var timeElapsed = 0L
     private var reverse = false
+    private val outline = Stroke(width = 3f)
 
     override fun onInit() {
     }
@@ -47,23 +48,31 @@ class CircleGridScale : BaseArts("CircleGridScale") {
 
             val radius = 50f
             val n = 25
+            val frameScale = scale
+            val circleRadius = radius * frameScale
+            val style = if (frameScale in 0.5f..0.95f) Fill else outline
+            val brush = SolidColor(config.foreground.value)
+            // Include half the stroke and an antialias pixel when clipping edge circles.
+            val visibleRadius = circleRadius + (if (style is Stroke) 1.5f else 0f) + 1f
             var colOffset: Float
             var rowOffset = 0f
             for (row in 1..n) {
+                if (rowOffset - visibleRadius > size.height) break
                 colOffset = if (row % 2 == 0) {
                     radius
                 } else {
                     0f
                 }
                 for (col in 1..n) {
+                    if (colOffset - visibleRadius > size.width) break
                     drawCircle(
-                        SolidColor(config.foreground.value),
-                        radius = radius * scale,
+                        brush,
+                        radius = circleRadius,
                         center = Offset(
                             colOffset,
                             rowOffset
                         ),
-                        style = if (scale in 0.5f..0.95f) Fill else Stroke(width = 3f)
+                        style = style
                     )
                     colOffset += 2 * radius
                 }

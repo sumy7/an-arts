@@ -30,6 +30,7 @@ class SnowFlake(private val width: Float) {
     // radius of snowflake spiral
     // chosen so the snowflakes are uniformly spread out in area
     private val radius = sqrt((0f..(width / 2) * (width / 2)).random().toDouble())
+    private val fallStep = size.pow(0.5f)
 
     fun update(time: Long, width: Float, height: Float) {
         liveTime += time
@@ -39,7 +40,7 @@ class SnowFlake(private val width: Float) {
         this.posX = (this.width / 2 + this.radius * sin(angle)).toFloat()
 
         // different size snowflakes fall at slightly different y speeds
-        this.posY += this.size.pow(0.5f)
+        this.posY += fallStep
 
         // delete snowflake if past end of screen
         if (this.posY > height) {
@@ -53,7 +54,7 @@ class SnowFlake(private val width: Float) {
  */
 class SnowFlakes : BaseArts("SnowFlakes") {
 
-    private var snowflakes = ArrayList<SnowFlake>()
+    private val snowflakes = ArrayList<SnowFlake>()
 
     private var width = 400f
     private var height = 600f
@@ -77,7 +78,16 @@ class SnowFlakes : BaseArts("SnowFlakes") {
             }
         }
 
-        snowflakes = ArrayList(snowflakes.filter { it.alive })
+        // Compact in drawing order and keep the backing array for the next frame.
+        var writeIndex = 0
+        for (readIndex in snowflakes.indices) {
+            val snowflake = snowflakes[readIndex]
+            if (snowflake.alive) {
+                if (writeIndex != readIndex) snowflakes[writeIndex] = snowflake
+                writeIndex++
+            }
+        }
+        while (snowflakes.size > writeIndex) snowflakes.removeAt(snowflakes.lastIndex)
     }
 
     override fun onDraw(config: ArtsConfig): DrawScope.() -> Unit {
